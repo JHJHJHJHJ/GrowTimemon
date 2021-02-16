@@ -15,10 +15,16 @@ public class QuestEditor : MonoBehaviour
     int[] currentRewards = new int[2]; // 0: gold 1: dia
 
     public bool isCreating = false;
+    public bool isEditing = false;
 
     private void Update() 
     {
         UpdateRewards();
+    }
+
+    public void Initialize()
+    {
+        currentRewards = new int[2] {0, 0};
     }
 
     public void AddNewSubquestPlate()
@@ -39,6 +45,8 @@ public class QuestEditor : MonoBehaviour
 
     void UpdateRewards()
     {
+        if(!isEditing) return;
+
         currentRewards[0] = 0;
 
         foreach(SubquestPlate plate in questWindow.plateList)

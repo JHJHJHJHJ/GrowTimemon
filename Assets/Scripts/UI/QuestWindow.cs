@@ -109,6 +109,8 @@ public class QuestWindow : MonoBehaviour
 
     public void CloseWindow() // 버튼에서 실행됨
     {
+        isEditing = false;
+
         this.gameObject.SetActive(false);
     }
 

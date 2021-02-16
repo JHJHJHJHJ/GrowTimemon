@@ -26,10 +26,12 @@ public class QuestManager : MonoBehaviour
     int currentSubquestIndex = 0;
 
     QuestEditor questEditor;
+    ResourceManager resourceManager;
 
     private void Awake()
     {
         questEditor = GetComponent<QuestEditor>();
+        resourceManager = FindObjectOfType<ResourceManager>();
     }
 
     private void Start()
@@ -63,6 +65,7 @@ public class QuestManager : MonoBehaviour
     void OpenQuestDetialWindow(Quest _questToOpen)
     {
         questEditor.isCreating = false;
+        questEditor.isEditing = false;
 
         questWindow.gameObject.SetActive(true);
         questWindow.OpenDetailWindow(_questToOpen);
@@ -72,6 +75,8 @@ public class QuestManager : MonoBehaviour
     {
         currentQuest = null;
         questEditor.isCreating = true;
+        questEditor.isEditing = true;
+        questEditor.Initialize();
 
         questWindow.gameObject.SetActive(true);
         questWindow.OpenCreateWindow();
@@ -168,6 +173,8 @@ public class QuestManager : MonoBehaviour
     {
         scrollView.SetActive(true);
         workingView.SetActive(false);
+
+        resourceManager.TakeReward(currentQuest.rewardGoldAmount, currentQuest.rewardDiaAmount);
     }
 
     //EDIT
@@ -187,6 +194,7 @@ public class QuestManager : MonoBehaviour
         {
             questEditor.EditQuest(currentQuest, currentQuest.iconSprite);
         }
+        questEditor.isEditing = false;
         
         questWindow.CloseWindow();
         OpenQuestDetialWindow(currentQuest);

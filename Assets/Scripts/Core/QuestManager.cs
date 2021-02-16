@@ -48,13 +48,19 @@ public class QuestManager : MonoBehaviour
         ObserveTouchedQuest();
     }
 
+    void UpdateCurrentQuest(Quest _questToUpdate)
+    {
+        currentQuest = _questToUpdate;
+        questEditor.currentQuest = _questToUpdate;
+    }
+
     void ObserveTouchedQuest()
     {
         foreach (Quest quest in questList)
         {
             if (quest.hasClicked)
             {
-                currentQuest = quest;
+                UpdateCurrentQuest(quest);
                 OpenQuestDetialWindow(currentQuest);
 
                 quest.hasClicked = false;
@@ -73,7 +79,7 @@ public class QuestManager : MonoBehaviour
 
     public void OpenQuestCreateWindow() // 버튼에서 실행됨
     {
-        currentQuest = null;
+        UpdateCurrentQuest(null);
         questEditor.isCreating = true;
         questEditor.isEditing = true;
         questEditor.Initialize();
@@ -186,13 +192,13 @@ public class QuestManager : MonoBehaviour
         if(questEditor.isCreating)
         {
             Quest newQuest = InstantiateNewQuestObject();
-            questEditor.EditQuest(newQuest, iconSprite);
-            currentQuest = newQuest;
+            questEditor.PasteEditedQuest(newQuest, iconSprite);
+            UpdateCurrentQuest(newQuest);
             questEditor.isCreating = false;
         }
         else
         {
-            questEditor.EditQuest(currentQuest, currentQuest.iconSprite);
+            questEditor.PasteEditedQuest(currentQuest, currentQuest.iconSprite);
         }
         questEditor.isEditing = false;
         

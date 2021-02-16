@@ -17,6 +17,8 @@ public class QuestEditor : MonoBehaviour
     public bool isCreating = false;
     public bool isEditing = false;
 
+    [HideInInspector] public Quest currentQuest = null;
+
     private void Update() 
     {
         UpdateRewards();
@@ -24,6 +26,7 @@ public class QuestEditor : MonoBehaviour
 
     public void Initialize()
     {
+        currentQuest = null;
         currentRewards = new int[2] {0, 0};
     }
 
@@ -32,7 +35,15 @@ public class QuestEditor : MonoBehaviour
         FindObjectOfType<QuestWindow>().InstantiateSubquestPlate();
     }
 
-    public void EditQuest(Quest _questToEdit, Sprite _iconSprite)
+    public void EnterEditMode()
+    {
+        isEditing = true;
+
+        questWindow.SwitchEditor(isEditing);
+        questWindow.UpdateQuestInfoToEdit(currentQuest);
+    }
+
+    public void PasteEditedQuest(Quest _questToEdit, Sprite _iconSprite)
     {
         List<SubQuest> newSubquestList = new List<SubQuest>();
         foreach(SubquestPlate plate in questWindow.plateList)

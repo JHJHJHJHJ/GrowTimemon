@@ -30,7 +30,7 @@ public class QuestWindow : MonoBehaviour
     [SerializeField] GameObject subquestAddButton = null;
     [SerializeField] Image confirmButton = null;
 
-    bool isEditing = false;
+    public bool isEditing = false;
     [HideInInspector] public List<SubquestPlate> plateList = new List<SubquestPlate>();
 
     private void Update()
@@ -74,18 +74,37 @@ public class QuestWindow : MonoBehaviour
         diaAmountText.text = 0.ToString();
     }
 
-    void SwitchEditor(bool _isEditor)
+    public void SwitchEditor(bool _isEditing)
     {
-        startButton.gameObject.SetActive(!_isEditor);
-        confirmButton.gameObject.SetActive(_isEditor);
+        isEditing = _isEditing;
 
-        inputField_title.gameObject.SetActive(_isEditor);
+        startButton.gameObject.SetActive(!_isEditing);
+        confirmButton.gameObject.SetActive(_isEditing);
+
+        inputField_title.gameObject.SetActive(_isEditing);
 
         inputField_title.text = "";
 
-        subquestAddButton.SetActive(_isEditor);
+        subquestAddButton.SetActive(_isEditing);
 
-        editButton.gameObject.SetActive(!_isEditor);
+        editButton.gameObject.SetActive(!_isEditing);
+    }
+
+    public void UpdateQuestInfoToEdit(Quest _quest)
+    {
+        inputField_title.text = _quest.title;
+
+        plateList = new List<SubquestPlate>();
+        
+        SubquestPlate[] plates = FindObjectsOfType<SubquestPlate>();
+
+        for(int i = plates.Length - 1; i >= 0; i--)
+        {
+            plates[i].SwitchEditMode(isEditing);
+            plates[i].UpdateEditInfo(_quest.subQuestList[_quest.subQuestList.Count - i - 1]);
+
+            plateList.Add(plates[i]);
+        }
     }
 
     void UpdateQuestInfo(Quest _quest)

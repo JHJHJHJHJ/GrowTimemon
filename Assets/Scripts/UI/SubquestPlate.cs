@@ -12,7 +12,7 @@ public class SubquestPlate : MonoBehaviour
     bool isEditing = false;
 
     [Header("Components")]
-    [SerializeField] TextMeshProUGUI titleText = null;
+    public TextMeshProUGUI titleText = null; // ser 로 바꾸기
     [SerializeField] TextMeshProUGUI timeText = null;
     [SerializeField] ProceduralImage checkerBackground = null;
     [SerializeField] ProceduralImage timerBackground = null;
@@ -69,6 +69,13 @@ public class SubquestPlate : MonoBehaviour
         timeText.gameObject.SetActive(isTimer);        
 
         timerToggle.gameObject.SetActive(_isEditing);
+    }
+
+    public void UpdateEditInfo(SubQuest _subquest)
+    {
+        inputField_title.text = _subquest.title;
+        if(_subquest.isTimer) inputField_time.text = _subquest.second.ToString();
+        else inputField_time.text = 0.ToString();
     }
 
     string GetTimeTextToUpdate(float _time)

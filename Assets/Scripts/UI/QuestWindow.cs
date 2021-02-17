@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class QuestWindow : MonoBehaviour
 {
+    [Header("Status")]
+    public bool isCreating = false;
+    public bool isEditing = false;
+    public List<SubquestPlate> plateList = new List<SubquestPlate>();
+
     [Header("Info")]
     [SerializeField] TextMeshProUGUI titleText = null;
     [SerializeField] GameObject timeLimit = null;
@@ -29,9 +34,9 @@ public class QuestWindow : MonoBehaviour
     [SerializeField] Image editButton = null;
     [SerializeField] GameObject subquestAddButton = null;
     [SerializeField] Image confirmButton = null;
-
-    public bool isEditing = false;
-    [HideInInspector] public List<SubquestPlate> plateList = new List<SubquestPlate>();
+    [SerializeField] GameObject subquestDeletePopUp = null;
+    [SerializeField] GameObject questDeleteButton = null;
+    [SerializeField] GameObject questDeletePopUp = null;
 
     private void Update()
     {
@@ -40,6 +45,7 @@ public class QuestWindow : MonoBehaviour
 
     public void OpenDetailWindow(Quest _quest)
     {
+        isCreating = false;
         isEditing = false;
 
         foreach (SubquestPlate subquestPlate in FindObjectsOfType<SubquestPlate>())
@@ -48,13 +54,15 @@ public class QuestWindow : MonoBehaviour
         }
 
         SwitchEditor(false);
+        editButton.gameObject.SetActive(true);
 
         UpdateQuestInfo(_quest);
-        InstantiateSubquestPlates(_quest);
+        InstantiateCurrentSubquestPlates(_quest);
     }
 
     public void OpenCreateWindow()
     {
+        isCreating = true;
         isEditing = true;
 
         plateList = new List<SubquestPlate>();
@@ -68,6 +76,7 @@ public class QuestWindow : MonoBehaviour
         confirmButton.color = Color.gray;
 
         SwitchEditor(true);
+        editButton.gameObject.SetActive(false);
 
         goldAmountText.text = 0.ToString();
         dia.SetActive(false);
@@ -87,23 +96,32 @@ public class QuestWindow : MonoBehaviour
 
         subquestAddButton.SetActive(_isEditing);
 
-        editButton.gameObject.SetActive(!_isEditing);
+        if(_isEditing) 
+        {
+            editButton.color = new Color32(255, 255, 255, 255);
+            if(!isCreating) questDeleteButton.SetActive(true);
+            else questDeleteButton.SetActive(false);
+        }
+        else 
+        {
+            editButton.color = new Color32(255, 255, 255, 40);
+            questDeleteButton.SetActive(false);
+        }
     }
 
     public void UpdateQuestInfoToEdit(Quest _quest)
     {
         inputField_title.text = _quest.title;
 
-        plateList = new List<SubquestPlate>();
-        
-        SubquestPlate[] plates = FindObjectsOfType<SubquestPlate>();
+        SwitchPlatesEdieMode(_quest);
+    }
 
-        for(int i = plates.Length - 1; i >= 0; i--)
+    public void SwitchPlatesEdieMode(Quest _quest)
+    {
+        foreach (SubquestPlate plate in plateList)
         {
-            plates[i].SwitchEditMode(isEditing);
-            plates[i].UpdateEditInfo(_quest.subQuestList[_quest.subQuestList.Count - i - 1]);
-
-            plateList.Add(plates[i]);
+            plate.SwitchEditMode(isEditing);
+            if(isEditing) plate.UpdateEditInfo(_quest.subQuestList[plate.index]);
         }
     }
 
@@ -114,16 +132,28 @@ public class QuestWindow : MonoBehaviour
         UpdateRewardsUI(_quest.rewardGoldAmount, _quest.rewardDiaAmount);
     }
 
-    void InstantiateSubquestPlates(Quest _quest)
+    void InstantiateCurrentSubquestPlates(Quest _quest)
     {
+        plateList = new List<SubquestPlate>();
+
         foreach (SubQuest subQuest in _quest.subQuestList)
         {
             SubquestPlate newPlate = Instantiate(subquestPlatePrefab, transform.position, Quaternion.identity, subquestsParent);
 
             newPlate.UpdatePlate(subQuest.title, subQuest.second);
+            plateList.Add(newPlate);
         }
-
+        UpdatePlatesIndex();
         subquestAddButton.transform.SetAsLastSibling();
+    }
+
+    
+    public void UpdatePlatesIndex()
+    {
+        for(int i = 0; i < plateList.Count; i++)
+        {
+            plateList[i].index = i;   
+        }
     }
 
     public void CloseWindow() // 버튼에서 실행됨
@@ -143,6 +173,8 @@ public class QuestWindow : MonoBehaviour
         subquestAddButton.transform.SetAsLastSibling();
 
         plateList.Add(newPlate);
+
+        UpdatePlatesIndex();
     }
 
     void UpdateConfirmButton()
@@ -193,5 +225,25 @@ public class QuestWindow : MonoBehaviour
         }
         
         goldAmountText.text = _goldAmount.ToString();
+    }
+
+    public void OpenSubquestDeletePopUp()
+    {
+        subquestDeletePopUp.SetActive(true);
+    }
+
+    public void CloseSubquestDeletePopUp()
+    {
+        subquestDeletePopUp.SetActive(false);
+    }
+
+    public void OpenQuestDeletePopUp()
+    {
+        questDeletePopUp.SetActive(true);
+    }
+
+    public void CloseQuestDeletePopUp()
+    {
+        questDeletePopUp.SetActive(false);
     }
 }

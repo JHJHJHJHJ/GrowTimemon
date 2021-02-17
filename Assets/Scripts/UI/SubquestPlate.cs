@@ -8,11 +8,18 @@ using UnityEngine.UI;
 
 public class SubquestPlate : MonoBehaviour
 {
+    [Header("Configs")]
+    [SerializeField] float timeToHold = 2f;
+
+    [Header("Status")]
     public bool isTimer = false;
+    public bool isWaiting = false;
+    public int index;
+
     bool isEditing = false;
 
     [Header("Components")]
-    public TextMeshProUGUI titleText = null; // ser 로 바꾸기
+    [SerializeField] TextMeshProUGUI titleText = null;
     [SerializeField] TextMeshProUGUI timeText = null;
     [SerializeField] ProceduralImage checkerBackground = null;
     [SerializeField] ProceduralImage timerBackground = null;
@@ -20,21 +27,52 @@ public class SubquestPlate : MonoBehaviour
     [SerializeField] TMP_InputField inputField_title = null;
     public TMP_InputField inputField_time = null;
 
+    bool isHolding = false;
+    float currentHoldTime = 0f;
+
+
+    private void Update()
+    {
+        WaitInputHold();
+    }
+
+    private void WaitInputHold()
+    {
+        if(!isEditing) return;
+
+        if (isHolding)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                currentHoldTime += Time.deltaTime;
+                if (currentHoldTime >= timeToHold)
+                {
+                    isWaiting = true; //
+                    isHolding = false;
+                }
+            }
+            else
+            {
+                isHolding = false;
+            }
+        }
+    }
+
     public void UpdatePlate(string _titleText, float _time)
     {
-        if(_time != 0) isTimer = true;
+        if (_time != 0) isTimer = true;
         else isTimer = false;
 
         SwitchEditMode(false);
         UpdateTimer(isTimer);
 
         titleText.text = _titleText;
-        if(isTimer) timeText.text = GetTimeTextToUpdate(_time);
+        if (isTimer) timeText.text = GetTimeTextToUpdate(_time);
     }
 
     void UpdateTimer(bool _isTimer)
     {
-        if(_isTimer)
+        if (_isTimer)
         {
             checkerBackground.gameObject.SetActive(false);
             timerBackground.gameObject.SetActive(true);
@@ -66,15 +104,16 @@ public class SubquestPlate : MonoBehaviour
         timeText.gameObject.SetActive(!_isEditing);
 
         inputField_time.gameObject.SetActive(isTimer);
-        timeText.gameObject.SetActive(isTimer);        
+        timeText.gameObject.SetActive(isTimer);
 
-        timerToggle.gameObject.SetActive(_isEditing);
+        if(_isEditing) timerToggle.gameObject.SetActive(true);
+        else if(!isTimer) timerToggle.gameObject.SetActive(false);
     }
 
     public void UpdateEditInfo(SubQuest _subquest)
     {
         inputField_title.text = _subquest.title;
-        if(_subquest.isTimer) inputField_time.text = _subquest.second.ToString();
+        if (_subquest.isTimer) inputField_time.text = _subquest.second.ToString();
         else inputField_time.text = 0.ToString();
     }
 
@@ -95,7 +134,7 @@ public class SubquestPlate : MonoBehaviour
     //EDIT
     public void ToggleTimer()
     {
-        if(!isEditing) return;
+        if (!isEditing) return;
 
         isTimer = !isTimer;
 
@@ -104,7 +143,7 @@ public class SubquestPlate : MonoBehaviour
 
         inputField_time.gameObject.SetActive(isTimer);
 
-        if(isTimer) timerToggle.color = Color.white;
+        if (isTimer) timerToggle.color = Color.white;
         else timerToggle.color = Color.gray;
     }
 
@@ -112,21 +151,21 @@ public class SubquestPlate : MonoBehaviour
     {
         int falseCount = 0;
 
-        if(inputField_title.text == "") falseCount++;
+        if (inputField_title.text == "") falseCount++;
 
-        if(isTimer)
+        if (isTimer)
         {
-            if(inputField_time.text == "") falseCount++;
+            if (inputField_time.text == "") falseCount++;
 
             float time = 0f;
-            if(float.TryParse(inputField_time.text, out time))
+            if (float.TryParse(inputField_time.text, out time))
             {
-                if(time <= 0f) falseCount++;
+                if (time <= 0f) falseCount++;
             }
             else falseCount++;
         }
 
-        if(falseCount <= 0) return true;
+        if (falseCount <= 0) return true;
         else return false;
     }
 
@@ -136,7 +175,7 @@ public class SubquestPlate : MonoBehaviour
 
         subQuest.isTimer = this.isTimer;
         subQuest.title = inputField_title.text;
-        if(isTimer)
+        if (isTimer)
         {
             subQuest.second = float.Parse(inputField_time.text);
         }
@@ -146,5 +185,13 @@ public class SubquestPlate : MonoBehaviour
         }
 
         return subQuest;
+    }
+
+    public void GetInputDown() // 이벤트 트리거에서 실행됨
+    {
+        if(!isEditing) return;
+
+        isHolding = true;
+        currentHoldTime = 0f;
     }
 }

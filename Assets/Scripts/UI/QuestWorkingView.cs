@@ -33,6 +33,7 @@ public class QuestWorkingView : MonoBehaviour
     {
         checker.SetActive(false);
         timer.SetActive(true);
+        timer.GetComponent<Timer>().OpenTimer();
 
         questTitleText.text = _questTitle;
 

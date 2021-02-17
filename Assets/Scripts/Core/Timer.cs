@@ -26,6 +26,11 @@ public class Timer : MonoBehaviour
         UpdateTimer();
     }
 
+    public void OpenTimer()
+    {
+        playButton.gameObject.SetActive(true);
+    }
+
     public void StartTimer()
     {
         isRunning = true;

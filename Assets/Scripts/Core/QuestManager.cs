@@ -70,8 +70,8 @@ public class QuestManager : MonoBehaviour
 
     void OpenQuestDetialWindow(Quest _questToOpen)
     {
-        questEditor.isCreating = false;
-        questEditor.isEditing = false;
+        questWindow.isCreating = false;
+        questWindow.isEditing = false;
 
         questWindow.gameObject.SetActive(true);
         questWindow.OpenDetailWindow(_questToOpen);
@@ -80,8 +80,8 @@ public class QuestManager : MonoBehaviour
     public void OpenQuestCreateWindow() // 버튼에서 실행됨
     {
         UpdateCurrentQuest(null);
-        questEditor.isCreating = true;
-        questEditor.isEditing = true;
+        questWindow.isCreating = true;
+        questWindow.isEditing = true;
         questEditor.Initialize();
 
         questWindow.gameObject.SetActive(true);
@@ -189,18 +189,18 @@ public class QuestManager : MonoBehaviour
     {
         if(!questWindow.CanConfirm()) return;
 
-        if(questEditor.isCreating)
+        if(questWindow.isCreating)
         {
             Quest newQuest = InstantiateNewQuestObject();
             questEditor.PasteEditedQuest(newQuest, iconSprite);
             UpdateCurrentQuest(newQuest);
-            questEditor.isCreating = false;
+            questWindow.isCreating = false;
         }
         else
         {
             questEditor.PasteEditedQuest(currentQuest, currentQuest.iconSprite);
         }
-        questEditor.isEditing = false;
+        questWindow.isEditing = false;
         
         questWindow.CloseWindow();
         OpenQuestDetialWindow(currentQuest);
@@ -221,5 +221,14 @@ public class QuestManager : MonoBehaviour
         FindObjectOfType<SwipeMenu>().DoNotScroll();
 
         return newQuest;
+    }
+
+    public void DeleteCurrentQuest() // Yes 버튼에서 실행됨
+    {
+        questList.Remove(currentQuest);
+        Destroy(currentQuest.gameObject);
+
+        questWindow.CloseQuestDeletePopUp();
+        questWindow.CloseWindow();
     }
 }

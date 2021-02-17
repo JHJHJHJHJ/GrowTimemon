@@ -3668,7 +3668,7 @@ RectTransform:
   m_Children:
   - {fileID: 1405111746}
   m_Father: {fileID: 156140789}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -4254,7 +4254,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1467057972}
-        m_MethodName: CloseDeletePopUp
+        m_MethodName: CloseSubquestDeletePopUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6204,7 +6204,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1059664682
 RectTransform:
   m_ObjectHideFlags: 0

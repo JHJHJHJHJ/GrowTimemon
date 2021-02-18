@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
+    [Header("Status")]
+    [SerializeField] bool isOnTheQuest = false;
+
     [Header("Quest List")]
     [SerializeField] List<Quest> questList = new List<Quest>();
 
@@ -21,7 +24,6 @@ public class QuestManager : MonoBehaviour
     [SerializeField] Sprite iconSprite = null;
     [SerializeField] List<SubQuest> subQuestList = new List<SubQuest>();
 
-    bool isOnTheQuest = false;
     Quest currentQuest = null;
     int currentSubquestIndex = 0;
 
@@ -126,14 +128,14 @@ public class QuestManager : MonoBehaviour
         if (isOnTheQuest)
         {
             Timer timer = FindObjectOfType<Timer>();
-            if (!timer.hasEnded)
+            if (!timer.isRunning)
             {
-                if(timer.isRunning) timer.PauseTimer();
-                else timer.StartTimer();
+                timer.StartTimer();
             }
             else
             {
                 MoveToNextSubQuest();
+                FindObjectOfType<Character>().AnimateWork(false);
             }
         }
     }
@@ -181,6 +183,15 @@ public class QuestManager : MonoBehaviour
         workingView.SetActive(false);
 
         resourceManager.TakeReward(currentQuest.rewardGoldAmount, currentQuest.rewardDiaAmount);
+    }
+
+    public void CancelQuest()
+    {
+        isOnTheQuest = false;
+        currentQuest = null;
+
+        scrollView.SetActive(true);
+        workingView.SetActive(false);
     }
 
     //EDIT

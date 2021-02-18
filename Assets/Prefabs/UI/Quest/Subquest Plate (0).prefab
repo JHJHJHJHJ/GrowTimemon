@@ -976,7 +976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94a9da7becbde649bc07a8fb00241ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToHold: 1.5
+  timeToHold: 1
   isTimer: 0
   isWaiting: 0
   index: 0

@@ -7,17 +7,15 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    [Header("Config")]
-    [TextArea] [SerializeField] string endedText = null;
+    [Header("Status")] public bool isRunning = false;
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI leftTimeText = null;
     [SerializeField] Slider timerSlider = null;
     [SerializeField] Button playButton = null;
-    [SerializeField] Button pauseButton = null;
+    [SerializeField] Button completeButton = null;
 
-    public bool isRunning = false;
-    public bool hasEnded = false;
+    bool isTimeOver = false;
     float leftTime;
     float maxTime;
 
@@ -26,79 +24,91 @@ public class Timer : MonoBehaviour
         UpdateTimer();
     }
 
-    public void OpenTimer()
+    public void SetupTimer(float _second)
     {
+        isRunning = false;
+        isTimeOver = false;
+        leftTime = _second;
+        maxTime = _second;
+
+        completeButton.gameObject.SetActive(false);
         playButton.gameObject.SetActive(true);
+
+        leftTimeText.color = Color.black;
+
+        timerSlider.GetComponent<Animator>().SetBool("TimeOver", false);
+
+        UpdateTimerUI();
     }
 
     public void StartTimer()
     {
         isRunning = true;
         playButton.gameObject.SetActive(false);
-        pauseButton.gameObject.SetActive(true);
+        completeButton.gameObject.SetActive(true);
 
         FindObjectOfType<Character>().AnimateWork(true);
+    }
+
+    void UpdateTimer()
+    {
+        if (!isRunning) return;
+
+        leftTime = leftTime - Time.deltaTime;
+        UpdateTimerUI();
+
+        if(!isTimeOver)
+        {
+            if(leftTime <= 0f) TimeOver();
+        }
     }
 
     public void PauseTimer()
     {
         isRunning = false;
-        pauseButton.gameObject.SetActive(false);
+        completeButton.gameObject.SetActive(false);
         playButton.gameObject.SetActive(true);
 
         FindObjectOfType<Character>().AnimateWork(false);
     }
 
-    void UpdateTimer()
+    public void CompleteTimer()
     {
-        if (hasEnded || !isRunning) return;
-
-        if (leftTime > 0)
-        {
-            leftTime = Mathf.Clamp(leftTime - Time.deltaTime, 0f, 999999f);
-            UpdateTimerUI();
-        }
-        else
-        {
-            EndTimer();
-        }
+        //
     }
 
-    void EndTimer()
+    void TimeOver()
     {
-        playButton.gameObject.SetActive(false);
-        pauseButton.gameObject.SetActive(false);
+        isTimeOver = true;
 
-        timerSlider.GetComponent<Animator>().SetBool("hasEnded", true);
-        FindObjectOfType<Character>().AnimateWork(false);
-
-        leftTimeText.text = endedText;
-
-        isRunning = false;
-        hasEnded = true;
-    }
-
-    public void SetupTimer(float _second)
-    {
-        isRunning = false;
-        hasEnded = false;
-
-        timerSlider.GetComponent<Animator>().SetBool("hasEnded", false);
-
-        leftTime = _second;
-        maxTime = _second;
-        UpdateTimerUI();
+        timerSlider.GetComponent<Animator>().SetBool("TimeOver", true);
+        leftTimeText.color = Color.yellow;
     }
 
     void UpdateTimerUI()
     {
-        int leftTimeCeiled = (int)Math.Ceiling(leftTime);
+        int leftTimeCeiled;
+        string timeTextToUpdate = "";
 
-        float minutes = Mathf.FloorToInt(leftTimeCeiled / 60);
-        float seconds = Mathf.FloorToInt(leftTimeCeiled % 60);
+        if(leftTime > -1f) leftTimeCeiled = (int)Math.Ceiling(leftTime);
+        else 
+        {
+            leftTimeCeiled = -(int)Math.Ceiling(leftTime);
 
-        leftTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            timeTextToUpdate += "+ ";
+        }
 
-        timerSlider.value = (maxTime - leftTime) / maxTime;
+        float hours = Mathf.FloorToInt(leftTimeCeiled / 3600);
+        float timeWithoutHours = Mathf.FloorToInt(leftTimeCeiled % 3600);
+        float minutes = Mathf.FloorToInt(timeWithoutHours / 60);
+        float seconds = Mathf.FloorToInt(timeWithoutHours % 60);
+
+        if (hours > 0) timeTextToUpdate += hours.ToString() + "시간 ";
+        if (minutes > 0) timeTextToUpdate += minutes.ToString() + "분 ";
+        if (seconds >= 0) timeTextToUpdate += seconds + "초";    
+
+        leftTimeText.text = timeTextToUpdate;
+
+        timerSlider.value = Mathf.Clamp((maxTime - leftTime) / maxTime, 0f, 1f);
     }
 }

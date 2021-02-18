@@ -121,12 +121,15 @@ public class SubquestPlate : MonoBehaviour
     {
         int time = (int)Math.Ceiling(_time);
 
-        float minutes = Mathf.FloorToInt(time / 60);
-        float seconds = Mathf.FloorToInt(time % 60);
+        float hours = Mathf.FloorToInt(time / 3600);
+        float timeWithoutHours = Mathf.FloorToInt(time % 3600);
+        float minutes = Mathf.FloorToInt(timeWithoutHours / 60);
+        float seconds = Mathf.FloorToInt(timeWithoutHours % 60);
 
         string timeTextToUpdate = "";
-        if (minutes > 0) timeTextToUpdate += minutes.ToString() + "분";
-        if (seconds > 0) timeTextToUpdate += " " + seconds.ToString() + "초";
+        if (hours > 0) timeTextToUpdate += hours.ToString() + "시간 ";
+        if (minutes > 0) timeTextToUpdate += minutes.ToString() + "분 ";
+        if (seconds > 0) timeTextToUpdate += seconds.ToString() + "초";
 
         return timeTextToUpdate;
     }

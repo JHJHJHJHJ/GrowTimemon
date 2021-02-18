@@ -10,8 +10,8 @@ public class Quest : MonoBehaviour
     public string title = null;
     public Sprite iconSprite = null;
     public List<SubQuest> subQuestList = new List<SubQuest>();
-    public int rewardDiaAmount = 0;
     public int rewardGoldAmount = 0;
+    public int rewardDiaAmount = 0;
     bool isTimeLimit = false;
 
 
@@ -28,14 +28,6 @@ public class Quest : MonoBehaviour
 
     private void Update() 
     {
-        // string stringToPrint = null;
-
-        // for(int i = 0; i < subQuestList.Count; i++)
-        // {
-        //     stringToPrint += i.ToString() + ": " + subQuestList[i].title + " / ";
-        // }    
-
-        // print(stringToPrint);
     }
 
     public void SetupQuest(string _title, Sprite _iconSprite, List<SubQuest> _subQuestList, int[] _rewardAmounts)

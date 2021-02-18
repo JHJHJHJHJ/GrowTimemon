@@ -31,7 +31,11 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp-firstpass
     - Assembly-CSharp
+    - MoreMountains.NiceVibrations.Demos
+    - MoreMountains.NiceVibrations
+    - MoreMountains.NiceVibrations.Haptics
     - PsdPlugin
+    - MoreMountains.NiceVibrations.Editor
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

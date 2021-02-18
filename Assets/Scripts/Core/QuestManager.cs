@@ -134,27 +134,33 @@ public class QuestManager : MonoBehaviour
             }
             else
             {
-                MoveToNextSubQuest();
-                FindObjectOfType<Character>().AnimateWork(false);
+                
             }
         }
     }
 
+    public void CompleteTimer()
+    {
+        MoveToNextSubQuest();
+        FindObjectOfType<Character>().AnimateWork(false);
+    }
+
     void MoveToNextSubQuest()
     {
+        FindObjectOfType<Character>().AnimateComplete();
+        FindObjectOfType<HapticPlayer>().PlayCompleteHaptic();
+
         if (currentSubquestIndex >= currentQuest.subQuestList.Count - 1) // 마지막일 때
         {
             QuestWorkingView questWorkingView = FindObjectOfType<QuestWorkingView>();
 
             isOnTheQuest = false;
 
-            questWorkingView.OpenCheckerUI(currentQuest.title, "보상 받기", "");
+            questWorkingView.OpenCheckerUI(currentQuest.title, "결과 확인", "");
             questWorkingView.UpdateWorkingText(isOnTheQuest);
         }
         else
         {
-            FindObjectOfType<Character>().AnimateComplete();
-
             currentSubquestIndex++;
             UpdateSubquest();
         }
@@ -192,6 +198,8 @@ public class QuestManager : MonoBehaviour
 
         scrollView.SetActive(true);
         workingView.SetActive(false);
+
+        FindObjectOfType<Character>().AnimateWork(false);
     }
 
     //EDIT

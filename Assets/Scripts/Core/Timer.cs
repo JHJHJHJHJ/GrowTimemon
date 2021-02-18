@@ -83,6 +83,8 @@ public class Timer : MonoBehaviour
 
         timerSlider.GetComponent<Animator>().SetBool("TimeOver", true);
         leftTimeText.color = Color.yellow;
+
+        FindObjectOfType<HapticPlayer>().PlayTimeOverHaptic();
     }
 
     void UpdateTimerUI()

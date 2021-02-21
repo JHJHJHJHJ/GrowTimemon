@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6157182760191988905}
   - component: {fileID: 6157182760191988904}
+  - component: {fileID: 449327126}
+  - component: {fileID: 449327127}
   m_Layer: 0
   m_Name: Quest Manager
   m_TagString: Untagged
@@ -43,12 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d42abb1b37639040a3b99dd050df82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOnTheQuest: 0
   questList: []
   questObject: {fileID: 3888899065819839915, guid: 6acd976a7a71d1545a46d01d12d9ffa3,
     type: 3}
   questParent: {fileID: 0}
-  ScrollView: {fileID: 0}
-  WorkingWindow: {fileID: 0}
+  scrollView: {fileID: 0}
+  workingView: {fileID: 0}
+  questWindow: {fileID: 0}
   title: "\uD14C\uC2A4\uD2B8\uD018\uC2A4\uD2B8"
   iconSprite: {fileID: 21300000, guid: 0884f438f6122a140abe435dd7e35b4f, type: 3}
   subQuestList:
@@ -64,3 +68,34 @@ MonoBehaviour:
   - title: "\uD14C\uC2A4\uD2B84"
     isTimer: 0
     second: 0
+--- !u!114 &449327126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6157182760191988902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1da04d68cfd844bbaef538f648970b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkerGoldWeight: 20
+  timerGoldConstant: 10
+  secondGoldWeight: 0.1
+  questWindow: {fileID: 0}
+  currentQuest: {fileID: 0}
+--- !u!114 &449327127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6157182760191988902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec7c8602fc8a5ca459482f77c9ea9d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resultWindow: {fileID: 0}
+  questCompleteTimeDiffrences: 

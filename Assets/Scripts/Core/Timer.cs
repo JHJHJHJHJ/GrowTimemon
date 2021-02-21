@@ -82,7 +82,6 @@ public class Timer : MonoBehaviour
         isTimeOver = true;
 
         timerSlider.GetComponent<Animator>().SetBool("TimeOver", true);
-        leftTimeText.color = Color.yellow;
 
         FindObjectOfType<HapticPlayer>().PlayTimeOverHaptic();
     }
@@ -95,6 +94,7 @@ public class Timer : MonoBehaviour
         if(leftTime > -1f) leftTimeCeiled = (int)Math.Ceiling(leftTime);
         else 
         {
+            leftTimeText.color = Color.yellow;
             leftTimeCeiled = -(int)Math.Ceiling(leftTime);
 
             timeTextToUpdate += "+ ";
@@ -107,10 +107,19 @@ public class Timer : MonoBehaviour
 
         if (hours > 0) timeTextToUpdate += hours.ToString() + "시간 ";
         if (minutes > 0) timeTextToUpdate += minutes.ToString() + "분 ";
-        if (seconds >= 0) timeTextToUpdate += seconds + "초";    
+        if (seconds >= 0)
+        {
+            if(seconds == 0 && (hours > 0 || minutes > 0)) {}
+            else timeTextToUpdate += seconds + "초";
+        } 
 
         leftTimeText.text = timeTextToUpdate;
 
         timerSlider.value = Mathf.Clamp((maxTime - leftTime) / maxTime, 0f, 1f);
+    }
+
+    public float GetLeftTime()
+    {
+        return leftTime;
     }
 }

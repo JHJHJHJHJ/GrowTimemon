@@ -129,7 +129,7 @@ public class QuestWindow : MonoBehaviour
     {
         titleText.text = _quest.title;
 
-        UpdateRewardsUI(_quest.rewardGoldAmount, _quest.rewardDiaAmount);
+        UpdateRewardsUI((int)_quest.rewardGoldAmount, (int)_quest.rewardDiaAmount);
     }
 
     void InstantiateCurrentSubquestPlates(Quest _quest)

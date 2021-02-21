@@ -10,8 +10,8 @@ public class Quest : MonoBehaviour
     public string title = null;
     public Sprite iconSprite = null;
     public List<SubQuest> subQuestList = new List<SubQuest>();
-    public int rewardGoldAmount = 0;
-    public int rewardDiaAmount = 0;
+    public float rewardGoldAmount = 0;
+    public float rewardDiaAmount = 0;
     bool isTimeLimit = false;
 
 
@@ -26,7 +26,7 @@ public class Quest : MonoBehaviour
         UpdateQuestObject();
     }
 
-    private void Update() 
+    private void Update()
     {
     }
 
@@ -51,6 +51,16 @@ public class Quest : MonoBehaviour
     public void StartQuest()
     {
         hasClicked = true;
+
+        InitializeSubquestCompleteTimeDifferences();
+    }
+
+    void InitializeSubquestCompleteTimeDifferences()
+    {
+        foreach (SubQuest subQuest in subQuestList)
+        {
+            subQuest.SetCompleteTimeDifference(0);
+        }
     }
 }
 
@@ -60,4 +70,15 @@ public class SubQuest
     public string title;
     public bool isTimer = false;
     public float second;
+    float completeTimeDifference;
+
+    public void SetCompleteTimeDifference(float _value)
+    {
+        completeTimeDifference = _value;
+    }
+
+    public float GetCompleteTimeDifference()
+    {
+        return completeTimeDifference;
+    }
 }

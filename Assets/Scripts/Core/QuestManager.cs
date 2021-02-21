@@ -28,11 +28,13 @@ public class QuestManager : MonoBehaviour
     int currentSubquestIndex = 0;
 
     QuestEditor questEditor;
+    QuestResultManager questResultManager;
     ResourceManager resourceManager;
 
     private void Awake()
     {
         questEditor = GetComponent<QuestEditor>();
+        questResultManager = GetComponent<QuestResultManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
     }
 
@@ -93,6 +95,7 @@ public class QuestManager : MonoBehaviour
     public void StartQuest() // 버튼에서 실행됨
     {
         questWindow.gameObject.SetActive(false);
+        questResultManager.SetCurrentQuest(currentQuest);
 
         isOnTheQuest = true;
 
@@ -119,7 +122,7 @@ public class QuestManager : MonoBehaviour
         }
         else // 완료되었을 때
         {
-            EndQuest();
+            ShowResult();
         }
     }
 
@@ -141,9 +144,13 @@ public class QuestManager : MonoBehaviour
 
     public void CompleteTimer()
     {
+        questResultManager.SetCurrentSubquestCompleteTimeDiffrence(currentSubquestIndex);
+
         MoveToNextSubQuest();
         FindObjectOfType<Character>().AnimateWork(false);
     }
+
+
 
     void MoveToNextSubQuest()
     {
@@ -183,12 +190,12 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    private void EndQuest()
+    void ShowResult()
     {
         scrollView.SetActive(true);
         workingView.SetActive(false);
 
-        resourceManager.TakeReward(currentQuest.rewardGoldAmount, currentQuest.rewardDiaAmount);
+        questResultManager.OpenResultWindow(currentQuest);
     }
 
     public void CancelQuest()

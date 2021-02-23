@@ -16,6 +16,7 @@ public class QuestEditor : MonoBehaviour
 
     [HideInInspector] public Quest currentQuest = null;
     int currentPlateIndex;
+    public Alarm alarmToEdit;
 
     private void Update()
     {
@@ -27,6 +28,7 @@ public class QuestEditor : MonoBehaviour
     {
         currentQuest = null;
         currentRewards = new int[2] { 0, 0 };
+        alarmToEdit = null;
     }
 
     public void AddNewSubquestPlate() // 버튼에서 실행됨
@@ -42,12 +44,15 @@ public class QuestEditor : MonoBehaviour
 
             questWindow.SwitchEditor(questWindow.isEditing);
             questWindow.UpdateQuestInfoToEdit(currentQuest);
+
+            alarmToEdit = currentQuest.alarm;
         }
         else
         {
             questWindow.isEditing = false;
 
             questWindow.OpenDetailWindow(currentQuest);
+            alarmToEdit = null;
         }
     }
 
@@ -59,7 +64,7 @@ public class QuestEditor : MonoBehaviour
             newSubquestList.Add(plate.GetSubquestInfo());
         }
 
-        _questToEdit.SetupQuest(questWindow.GetInputedTitle(), _iconSprite, newSubquestList, currentRewards);
+        _questToEdit.SetupQuest(questWindow.GetInputedTitle(), _iconSprite, newSubquestList, currentRewards, alarmToEdit);
     }
 
     void UpdateRewards()
@@ -113,5 +118,24 @@ public class QuestEditor : MonoBehaviour
         questWindow.UpdatePlatesIndex();
 
         questWindow.CloseSubquestDeletePopUp();
+    }
+
+    public void SetAlarm() // 버튼에서 실행됨
+    {
+        Alarm newAlarm = FindObjectOfType<AlarmSetWindow>().GetAlarmSetting();
+        if(!newAlarm.hasAlarm)
+        {
+            newAlarm.hour = 0;
+            newAlarm.minute = 0;
+        }
+
+        alarmToEdit = newAlarm;
+        questWindow.CloseAlarmSetWindow();
+        questWindow.UpdateAlarmUI(alarmToEdit);
+    }
+
+    public void OpenAlarmSet()
+    {
+        questWindow.OpenAlarmSetWindow(alarmToEdit);
     }
 }

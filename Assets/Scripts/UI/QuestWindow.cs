@@ -13,7 +13,7 @@ public class QuestWindow : MonoBehaviour
 
     [Header("Info")]
     [SerializeField] TextMeshProUGUI titleText = null;
-    [SerializeField] GameObject timeLimit = null;
+    [SerializeField] GameObject StartTime = null;
     [SerializeField] TextMeshProUGUI timeText = null;
     [SerializeField] GameObject gold = null;
     [SerializeField] TextMeshProUGUI goldAmountText = null;
@@ -32,11 +32,14 @@ public class QuestWindow : MonoBehaviour
     [Header("Editor")]
     [SerializeField] TMP_InputField inputField_title = null;
     [SerializeField] Image editButton = null;
+    [SerializeField] Button addAlarmButton = null; 
+    [SerializeField] TextMeshProUGUI alarmSetText = null;
     [SerializeField] GameObject subquestAddButton = null;
     [SerializeField] Image confirmButton = null;
     [SerializeField] GameObject subquestDeletePopUp = null;
     [SerializeField] GameObject questDeleteButton = null;
     [SerializeField] GameObject questDeletePopUp = null;
+    [SerializeField] AlarmSetWindow alarmSetWindow = null;
 
     private void Update()
     {
@@ -57,6 +60,7 @@ public class QuestWindow : MonoBehaviour
         editButton.gameObject.SetActive(true);
 
         UpdateQuestInfo(_quest);
+        UpdateAlarmUI(_quest.alarm);
         InstantiateCurrentSubquestPlates(_quest);
     }
 
@@ -77,6 +81,7 @@ public class QuestWindow : MonoBehaviour
 
         SwitchEditor(true);
         editButton.gameObject.SetActive(false);
+        UpdateAlarmUI(new Alarm());
 
         goldAmountText.text = 0.ToString();
         dia.SetActive(false);
@@ -107,6 +112,9 @@ public class QuestWindow : MonoBehaviour
             editButton.color = new Color32(255, 255, 255, 40);
             questDeleteButton.SetActive(false);
         }
+
+        StartTime.SetActive(!isEditing);
+        addAlarmButton.gameObject.SetActive(isEditing);
     }
 
     public void UpdateQuestInfoToEdit(Quest _quest)
@@ -245,5 +253,47 @@ public class QuestWindow : MonoBehaviour
     public void CloseQuestDeletePopUp()
     {
         questDeletePopUp.SetActive(false);
+    }
+
+    public void OpenAlarmSetWindow(Alarm _alarm)
+    {
+        alarmSetWindow.gameObject.SetActive(true);
+        alarmSetWindow.Initialize(_alarm);
+    }
+
+    public void CloseAlarmSetWindow()
+    {
+        alarmSetWindow.gameObject.SetActive(false);
+    }
+
+    public void UpdateAlarmUI(Alarm _alarm)
+    {
+        if(_alarm != null && _alarm.hasAlarm)
+        {
+            timeText.text = _alarm.hour + ":" + _alarm.minute.ToString("D2") + " " + _alarm.noon;
+            alarmSetText.text = _alarm.hour + ":" + _alarm.minute.ToString("D2") + " " + _alarm.noon;
+        }
+        else
+        {
+            alarmSetText.text = "+ 시작 시간";
+        }
+
+        if(isEditing)
+        {
+            StartTime.SetActive(!isEditing);
+            addAlarmButton.gameObject.SetActive(isEditing);
+        }
+        else
+        {
+            addAlarmButton.gameObject.SetActive(isEditing);
+            if(_alarm != null && _alarm.hasAlarm)
+            {
+                StartTime.SetActive(true);
+            }
+            else
+            {
+                StartTime.SetActive(false);
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ public class QuestResultManager : MonoBehaviour
     [SerializeField] QuestResultWindow resultWindow = null;
     
     Quest currentQuest = null;
+    DateTime[] questTime = new DateTime[2];
 
     float totalTime;
     float totalDeltaTime;
@@ -35,9 +36,10 @@ public class QuestResultManager : MonoBehaviour
         currentQuest.subQuestList[_currentSubquestIndex].SetCompleteTimeDifference(completeTimeDifference);
     }
 
-    public void OpenResultWindow(Quest _currentQuest)  // 버튼에서 실행됨
+    public void OpenResultWindow(Quest _currentQuest, DateTime[] _dateTime)  // 버튼에서 실행됨
     {
         currentQuest = _currentQuest;
+        questTime = _dateTime;
 
         CalculateClearTime();
 
@@ -53,7 +55,7 @@ public class QuestResultManager : MonoBehaviour
         yield return StartCoroutine(resultWindow.UpdateTop(currentQuest));
         yield return new WaitForSeconds(1f);
 
-        yield return StartCoroutine(resultWindow.UpdateClearTime(currentQuest, totalDeltaTime, totalTime));
+        yield return StartCoroutine(resultWindow.UpdateClearTime(currentQuest, totalDeltaTime, totalTime, questTime));
         yield return new WaitForSeconds(1f);
 
         yield return StartCoroutine(resultWindow.SetUpAdditionalGoals(currentQuest, totalDeltaTime, totalTime, accuracyStandard));
@@ -63,7 +65,7 @@ public class QuestResultManager : MonoBehaviour
         resultWindow.UpdateRewards(rewards[0], rewards[1]);
         yield return new WaitForSeconds(1f);
 
-        resultWindow.ActiveRewardButton();
+        resultWindow.ActivateRewardButton();
     }
 
     void CalculateClearTime()
@@ -105,8 +107,8 @@ public class QuestResultManager : MonoBehaviour
         resultWindow.gameObject.SetActive(false);
     }
 
-    public void OpenLogWindow()
+    public void OpenLogWindow() // 버튼에서 실행됨
     {
-
+        resultWindow.OpenLogWindow(currentQuest);
     }
 }

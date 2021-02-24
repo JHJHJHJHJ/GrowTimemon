@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class QuestManager : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class QuestManager : MonoBehaviour
     QuestEditor questEditor;
     QuestResultManager questResultManager;
     ResourceManager resourceManager;
+    DateTime[] questTime = new DateTime[2];
+
 
     private void Awake()
     {
@@ -109,6 +112,8 @@ public class QuestManager : MonoBehaviour
         currentSubquestIndex = 0;
 
         UpdateSubquest();
+
+        questTime[0] = DateTime.Now;
     }
 
     public void TouchChecker()
@@ -122,6 +127,7 @@ public class QuestManager : MonoBehaviour
         }
         else // 완료되었을 때
         {
+            questTime[1] = DateTime.Now;
             ShowResult();
         }
     }
@@ -195,7 +201,7 @@ public class QuestManager : MonoBehaviour
         scrollView.SetActive(true);
         workingView.SetActive(false);
 
-        questResultManager.OpenResultWindow(currentQuest);
+        questResultManager.OpenResultWindow(currentQuest, questTime);
     }
 
     public void CancelQuest()

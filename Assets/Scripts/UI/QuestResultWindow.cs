@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class QuestResultWindow : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class QuestResultWindow : MonoBehaviour
     [SerializeField] TextMeshProUGUI celebrationText = null;
     [SerializeField] Celebrations celebrations;
     [SerializeField] TextMeshProUGUI titleText = null;
+    [SerializeField] GameObject startTime = null;
     [SerializeField] TextMeshProUGUI timeText = null;
 
     [Header("Clear Time")]
@@ -28,6 +30,12 @@ public class QuestResultWindow : MonoBehaviour
     [SerializeField] TextMeshProUGUI diaText = null;
     [SerializeField] GameObject getRewardButton = null;
 
+    [Header("Log Window")]
+    [SerializeField] Button logWindowButton = null;
+    [SerializeField] GameObject logWindow = null;
+    [SerializeField] Transform parent = null;
+    [SerializeField] Log logPrefab = null;
+
     public void InitializeWindow()
     {
         celebrationText.gameObject.SetActive(false);
@@ -43,6 +51,8 @@ public class QuestResultWindow : MonoBehaviour
         getRewardButton.SetActive(false);
         gold.gameObject.SetActive(false);
         dia.gameObject.SetActive(false);
+
+        logWindowButton.gameObject.SetActive(false);
     }
 
 
@@ -66,13 +76,22 @@ public class QuestResultWindow : MonoBehaviour
         titleText.gameObject.SetActive(true);
         timeText.gameObject.SetActive(true);
         titleText.text = _quest.title;
-        // Update Time Text
+
+        if (_quest.alarm.hasAlarm)
+        {
+            startTime.SetActive(true);
+            timeText.text = _quest.alarm.hour + ":" + _quest.alarm.minute.ToString("D2") + " " + _quest.alarm.noon;
+        }
+        else
+        {
+            startTime.SetActive(false);
+        }
     }
 
-    public IEnumerator UpdateClearTime(Quest _Quest, float _totalDeltaTime, float _totalTime)
+    public IEnumerator UpdateClearTime(Quest _Quest, float _totalDeltaTime, float _totalTime, DateTime[] _dateTimes)
     {
         clearTime.SetActive(true);
-        //Update workedTime Text
+        workedTimeText.text = GetTimeString(_dateTimes[0]) + " ~ " + GetTimeString(_dateTimes[1]);
 
         float totalDeltaTimeToUpdate = 0f;
         UpdateSlider(totalDeltaTimeToUpdate, _totalTime);
@@ -83,7 +102,7 @@ public class QuestResultWindow : MonoBehaviour
         {
             totalDeltaTimeToUpdate = Mathf.Clamp(
                 totalDeltaTimeToUpdate + Time.deltaTime * 2f,
-                0f, _totalDeltaTime); // easein-out 구현하기
+                0f, _totalDeltaTime); // easein-out 구현하기 && 속도 바꾸기
 
             UpdateSlider(totalDeltaTimeToUpdate, _totalTime);
 
@@ -109,8 +128,24 @@ public class QuestResultWindow : MonoBehaviour
         // proper time
         additionalGoals[0].SetActiveThis(true);
 
-        //if TRUE
-        SetUpAdditionalGoalByAchieveing(0, true);
+        if (_Quest.alarm.hasAlarm)
+        {
+            if (IsRightTime(_Quest.alarm))
+            {
+                SetUpAdditionalGoalByAchieveing(0, true);
+                additionalGoals[0].explainationText.text = "제 시간에 시작했어요!";
+            }
+            else
+            {
+                SetUpAdditionalGoalByAchieveing(0, false);
+                additionalGoals[0].explainationText.text = "다음엔 미루지 말아요!";
+            }
+        }
+        else
+        {
+            SetUpAdditionalGoalByAchieveing(0, false);
+            additionalGoals[0].explainationText.text = "시작 시간을 설정하면\n다이아를 받을 수 있어요.";
+        }
 
         yield return new WaitForSeconds(0.25f);
 
@@ -167,6 +202,28 @@ public class QuestResultWindow : MonoBehaviour
                 "타이머 시간을 조절해보세요.";
         }
     }
+
+    bool IsRightTime(Alarm _alarm)
+    {
+        int hour = _alarm.hour;
+        if(hour == 12)
+        {
+            if(_alarm.noon == Noon.AM) hour = 0; 
+        }
+        else if(_alarm.noon == Noon.PM)
+        {
+            hour += 12;
+        }
+
+        DateTime dateTime = new DateTime(
+        DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
+        hour, _alarm.minute, 0);
+
+        DateTime before10m = dateTime.AddMinutes(-10d);
+        DateTime after10m = dateTime.AddMinutes(10d);
+
+        return (before10m <= DateTime.Now && DateTime.Now <= after10m);
+    }
     public void UpdateRewards(int _gold, int _dia)
     {
         gold.gameObject.SetActive(true);
@@ -202,12 +259,12 @@ public class QuestResultWindow : MonoBehaviour
         additionalGoals[_index].reward.SetActive(_isAchieved);
     }
 
-    string ConvertTimeText(float _time)
+    string ConvertTimeText(float _seconds)
     {
-        float hours = Mathf.FloorToInt(_time / 3600);
-        float timeWithoutHours = Mathf.FloorToInt(_time % 3600);
-        float minutes = Mathf.FloorToInt(_time / 60);
-        float seconds = Mathf.FloorToInt(_time % 60);
+        float hours = Mathf.FloorToInt(_seconds / 3600);
+        float timeWithoutHours = Mathf.FloorToInt(_seconds % 3600);
+        float minutes = Mathf.FloorToInt(_seconds / 60);
+        float seconds = Mathf.FloorToInt(_seconds % 60);
 
         string convertedTimeText = "";
         if (hours > 0) convertedTimeText += hours.ToString() + "시간 ";
@@ -221,9 +278,57 @@ public class QuestResultWindow : MonoBehaviour
         return convertedTimeText;
     }
 
-    public void ActiveRewardButton()
+    string GetTimeString(DateTime _dateTime)
     {
+        int h = _dateTime.Hour;
+        int m = _dateTime.Minute;
+        string timeString = "";
+
+        if (_dateTime.Hour == 0)
+        {
+            timeString = "12" + ":" + m.ToString("D2") + " AM";
+        }
+        else if (_dateTime.Hour == 12)
+        {
+            timeString = h.ToString() + ":" + m.ToString("D2") + " PM";
+        }
+        else if (_dateTime.Hour > 12)
+        {
+            timeString = (h - 12).ToString() + ":" + m.ToString("D2") + " PM";
+        }
+        else
+        {
+            timeString = h.ToString() + ":" + m.ToString("D2") + " AM";
+        }
+
+        return timeString;
+    }
+
+    public void ActivateRewardButton()
+    {
+        logWindowButton.gameObject.SetActive(true);
         getRewardButton.SetActive(true);
+    }
+
+    public void OpenLogWindow(Quest _quest) 
+    {
+        logWindow.SetActive(true);
+
+        foreach (Log log in FindObjectsOfType<Log>())
+        {
+            Destroy(log.gameObject);
+        }
+
+        foreach(SubQuest subQuest in _quest.subQuestList)
+        {
+            Log newLog = Instantiate(logPrefab, transform.position, Quaternion.identity, parent);
+            newLog.UpdateLog(subQuest);
+        }
+    }
+
+    public void CloseLogWindow() // 버튼에서 실행됨
+    {
+        logWindow.SetActive(false);
     }
 }
 

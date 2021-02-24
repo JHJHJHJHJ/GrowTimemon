@@ -113,7 +113,7 @@ public class SubquestPlate : MonoBehaviour
     public void UpdateEditInfo(SubQuest _subquest)
     {
         inputField_title.text = _subquest.title;
-        if (_subquest.isTimer) inputField_time.text = _subquest.second.ToString();
+        if (_subquest.isTimer) inputField_time.text = (_subquest.second / 60f).ToString();
         else inputField_time.text = 0.ToString();
     }
 
@@ -180,7 +180,7 @@ public class SubquestPlate : MonoBehaviour
         subQuest.title = inputField_title.text;
         if (isTimer)
         {
-            subQuest.second = float.Parse(inputField_time.text);
+            subQuest.second = float.Parse(inputField_time.text) * 60f;
         }
         else
         {

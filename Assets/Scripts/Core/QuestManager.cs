@@ -31,6 +31,7 @@ public class QuestManager : MonoBehaviour
     QuestEditor questEditor;
     QuestResultManager questResultManager;
     ResourceManager resourceManager;
+    NotificationManager notificationManager;
     DateTime[] questTime = new DateTime[2];
 
 
@@ -39,6 +40,7 @@ public class QuestManager : MonoBehaviour
         questEditor = GetComponent<QuestEditor>();
         questResultManager = GetComponent<QuestResultManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
+        notificationManager = FindObjectOfType<NotificationManager>();
     }
 
     private void Start()
@@ -48,6 +50,7 @@ public class QuestManager : MonoBehaviour
         {
             questList.Add(quests[i]);
         }
+        notificationManager.RefreshNotifications(questList);
     }
 
     private void Update()
@@ -236,6 +239,8 @@ public class QuestManager : MonoBehaviour
         
         questWindow.CloseWindow();
         OpenQuestDetialWindow(currentQuest);
+
+        notificationManager.RefreshNotifications(questList);
     }
 
     Quest InstantiateNewQuestObject()
@@ -262,5 +267,7 @@ public class QuestManager : MonoBehaviour
 
         questWindow.CloseQuestDeletePopUp();
         questWindow.CloseWindow();
+
+        notificationManager.RefreshNotifications(questList);
     }
 }

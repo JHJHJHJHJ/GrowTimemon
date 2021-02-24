@@ -43,27 +43,22 @@ public class QuestResultManager : MonoBehaviour
 
         CalculateClearTime();
 
-        StartCoroutine(ShowResult());
+        ShowResult();
     }
 
-    IEnumerator ShowResult()
+    void ShowResult()
     {
         resultWindow.gameObject.SetActive(true);
         resultWindow.InitializeWindow();
-        yield return new WaitForSeconds(0.5f);
         
-        yield return StartCoroutine(resultWindow.UpdateTop(currentQuest));
-        yield return new WaitForSeconds(1f);
+        resultWindow.UpdateTop(currentQuest);
 
-        yield return StartCoroutine(resultWindow.UpdateClearTime(currentQuest, totalDeltaTime, totalTime, questTime));
-        yield return new WaitForSeconds(1f);
+        resultWindow.UpdateClearTime(currentQuest, totalDeltaTime, totalTime, questTime);
 
-        yield return StartCoroutine(resultWindow.SetUpAdditionalGoals(currentQuest, totalDeltaTime, totalTime, accuracyStandard));
-        yield return new WaitForSeconds(1f);
+        resultWindow.SetUpAdditionalGoals(currentQuest, totalDeltaTime, totalTime, accuracyStandard);
     
         CalculateRewards();
         resultWindow.UpdateRewards(rewards[0], rewards[1]);
-        yield return new WaitForSeconds(1f);
 
         resultWindow.ActivateRewardButton();
     }
@@ -88,9 +83,18 @@ public class QuestResultManager : MonoBehaviour
         float gold = currentQuest.rewardGoldAmount;
         float dia = currentQuest.rewardDiaAmount;
 
-        if(resultWindow.additionalGoals[0].isAchieved) dia += 50f;
-        if(resultWindow.additionalGoals[1].isAchieved) gold *= 1.2f;
-        if(resultWindow.additionalGoals[2].isAchieved) gold *= 1.2f;
+        if(resultWindow.additionalGoals[0].isAchieved) 
+        {
+            dia += 50f;
+        }
+        if(resultWindow.additionalGoals[1].isAchieved) 
+        {
+            gold *= 1.2f;
+        }
+        if(resultWindow.additionalGoals[2].isAchieved) 
+        {
+            gold *= 1.2f;
+        }
 
         rewards[0] = (int)gold;
         rewards[1] = (int)dia;

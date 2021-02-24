@@ -56,11 +56,9 @@ public class QuestResultWindow : MonoBehaviour
     }
 
 
-    public IEnumerator UpdateTop(Quest _quest)
+    public void UpdateTop(Quest _quest)
     {
         UpdateCelebration();
-
-        yield return new WaitForSeconds(0.5f);
 
         UpdateTitle(_quest);
     }
@@ -88,26 +86,20 @@ public class QuestResultWindow : MonoBehaviour
         }
     }
 
-    public IEnumerator UpdateClearTime(Quest _Quest, float _totalDeltaTime, float _totalTime, DateTime[] _dateTimes)
+    public void UpdateClearTime(Quest _Quest, float _totalDeltaTime, float _totalTime, DateTime[] _dateTimes)
     {
+        int timerCount = 0;
+        foreach(SubQuest subQuest in _Quest.subQuestList)
+        {
+            if(subQuest.isTimer) timerCount++;
+        }
+
+        if(timerCount <= 0) return;
+
         clearTime.SetActive(true);
         workedTimeText.text = GetTimeString(_dateTimes[0]) + " ~ " + GetTimeString(_dateTimes[1]);
 
-        float totalDeltaTimeToUpdate = 0f;
-        UpdateSlider(totalDeltaTimeToUpdate, _totalTime);
-
-        yield return new WaitForSeconds(0.5f);
-
-        while (totalDeltaTimeToUpdate < _totalDeltaTime)
-        {
-            totalDeltaTimeToUpdate = Mathf.Clamp(
-                totalDeltaTimeToUpdate + Time.deltaTime * 2f,
-                0f, _totalDeltaTime); // easein-out 구현하기 && 속도 바꾸기
-
-            UpdateSlider(totalDeltaTimeToUpdate, _totalTime);
-
-            yield return null;
-        }
+        UpdateSlider(_totalDeltaTime, _totalTime);
     }
 
     void UpdateSlider(float _totalDeltaTime, float _totalTime)
@@ -120,10 +112,9 @@ public class QuestResultWindow : MonoBehaviour
         else clearTimeSlider.value = 1f;
     }
 
-    public IEnumerator SetUpAdditionalGoals(Quest _Quest, float _totalDeltaTime, float _totalTime, float _accuratyStandard)
+    public void SetUpAdditionalGoals(Quest _Quest, float _totalDeltaTime, float _totalTime, float _accuratyStandard)
     {
         additionalGoalsBackground.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
 
         // proper time
         additionalGoals[0].SetActiveThis(true);
@@ -147,7 +138,20 @@ public class QuestResultWindow : MonoBehaviour
             additionalGoals[0].explainationText.text = "시작 시간을 설정하면\n다이아를 받을 수 있어요.";
         }
 
-        yield return new WaitForSeconds(0.25f);
+        // 타이머 없는 순수 체크 퀘스트의 경우 아래 생략
+        int timerCount = 0;
+        foreach(SubQuest subQuest in _Quest.subQuestList)
+        {
+            if(subQuest.isTimer) timerCount++;
+        }
+
+        if(timerCount <= 0) 
+        {
+            SetUpAdditionalGoalByAchieveing(1, false);
+            SetUpAdditionalGoalByAchieveing(2, false);
+            
+            return;
+        }
 
         // time attack
         additionalGoals[1].SetActiveThis(true);
@@ -169,8 +173,6 @@ public class QuestResultWindow : MonoBehaviour
                 "\n" +
                 "조금 더 힘내서 집중해봐요!";
         }
-
-        yield return new WaitForSeconds(0.25f);
 
         // accuracy
         additionalGoals[2].SetActiveThis(true);

@@ -13,6 +13,11 @@ public class ResourceDisplay : MonoBehaviour
         userData = FindObjectOfType<UserData>();    
     }
 
+    private void Update() 
+    {
+         UpdateResourceText();
+    }
+
     public void UpdateResourceText()
     {
         goldText.text = userData.GetGold().ToString();

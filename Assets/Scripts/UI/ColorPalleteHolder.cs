@@ -26,7 +26,6 @@ public class ColorPalleteHolder : MonoBehaviour
         else if(_value == ColorValue.White) colorToReturn = Color.white;
         else
         {
-            print(currentColorPallete.colors[(int)_value].color);
             colorToReturn = currentColorPallete.colors[(int)_value].color;
         }
 

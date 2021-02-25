@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a67a08668a8a4bf4e8adf5f7be3eb238, type: 3}
+  m_Name: Bubble Gum
+  m_EditorClassIdentifier: 
+  palleteName: Bubble Gum
+  colors:
+  - value: 0
+    color: {r: 1, g: 0.9976923, b: 0.97, a: 1}
+  - value: 1
+    color: {r: 0.9607844, g: 0.8980393, b: 0.86274517, a: 1}
+  - value: 2
+    color: {r: 0.9960785, g: 0.47058827, b: 0.6862745, a: 1}
+  - value: 3
+    color: {r: 0.015686275, g: 0.5529412, b: 0.65882355, a: 1}
+  - value: 4
+    color: {r: 0.18039216, g: 0.16078432, b: 0.011764707, a: 1}

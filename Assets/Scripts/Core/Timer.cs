@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.ProceduralImage;
 using TMPro;
 
 public class Timer : MonoBehaviour
@@ -12,6 +13,7 @@ public class Timer : MonoBehaviour
     [Header("Components")]
     [SerializeField] TextMeshProUGUI leftTimeText = null;
     [SerializeField] Slider timerSlider = null;
+    [SerializeField] ProceduralImage sliderFill = null;
     [SerializeField] Button playButton = null;
     [SerializeField] Button completeButton = null;
 
@@ -35,6 +37,7 @@ public class Timer : MonoBehaviour
         playButton.gameObject.SetActive(true);
 
         leftTimeText.color = Color.black;
+        sliderFill.GetComponent<ColorChanger>().ChangeColor();
 
         timerSlider.GetComponent<Animator>().SetBool("TimeOver", false);
 

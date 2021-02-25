@@ -150,6 +150,9 @@ public class QuestResultWindow : MonoBehaviour
             SetUpAdditionalGoalByAchieveing(1, false);
             SetUpAdditionalGoalByAchieveing(2, false);
             
+            additionalGoals[1].SetActiveThis(false);
+            additionalGoals[2].SetActiveThis(false);
+            
             return;
         }
 

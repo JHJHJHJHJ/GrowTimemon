@@ -4,6 +4,8 @@ public class SystemSetUp : MonoBehaviour
 {
     QuestManager questManager;
     UserData userData;
+    ColorPalleteHolder colorPaletteHolder;
+    Encyclopedia encyclopedia;
 
     private void Awake() 
     {
@@ -11,6 +13,8 @@ public class SystemSetUp : MonoBehaviour
 
         questManager = FindObjectOfType<QuestManager>(); 
         userData = FindObjectOfType<UserData>();
+        colorPaletteHolder = FindObjectOfType<ColorPalleteHolder>();
+        encyclopedia = FindObjectOfType<Encyclopedia>();
     }
 
     void OnApplicationQuit() 
@@ -22,5 +26,7 @@ public class SystemSetUp : MonoBehaviour
     {
         questManager.SaveQuests();
         userData.SaveResources();
+        colorPaletteHolder.SavePaletteIndex();
+        encyclopedia.SavePaletteItemsStatus();
     } 
 }

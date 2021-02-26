@@ -77,5 +77,13 @@ public class Encyclopedia : MonoBehaviour
     {
         encyclopediaWindow.SetActive(false);
     }
+
+    public void SavePaletteItemsStatus()
+    {
+        foreach(PaletteItem paletteItem in paletteItems)
+        {
+            paletteItem.SaveStatus();
+        }
+    }
 }
 

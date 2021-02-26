@@ -6,6 +6,7 @@ public class ColorPalleteHolder : MonoBehaviour
 {   
     [SerializeField] ColorPallete[] palletes;
     [SerializeField] ColorPallete currentColorPallete;
+    int currentPaletteIndex = 0;
 
     void Awake()
     {
@@ -14,6 +15,7 @@ public class ColorPalleteHolder : MonoBehaviour
 
     public void ChangeCurrentPallete(int _index)
     {
+        currentPaletteIndex = _index;
         currentColorPallete = palletes[_index];
     }
 
@@ -30,5 +32,19 @@ public class ColorPalleteHolder : MonoBehaviour
         }
 
         return colorToReturn;
+    }
+
+    public void SavePaletteIndex()
+    {
+        ES3.Save<int>("paletteIndex", currentPaletteIndex);
+    }
+
+    public int LoadCurrentPalette()
+    {
+        int index = 0;
+        if(ES3.KeyExists("paletteIndex")) index = ES3.Load<int>("paletteIndex");
+
+        ChangeCurrentPallete(index);
+        return index;
     }
 }

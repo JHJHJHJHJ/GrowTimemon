@@ -29,6 +29,8 @@ public class PaletteItem : MonoBehaviour
 
     private void Start() 
     {
+        LoadStatus();
+
         UpdateColors();
         UpdateItem();    
     }
@@ -106,5 +108,22 @@ public class PaletteItem : MonoBehaviour
     public int GetPrice()
     {
         return price;
+    }
+
+    public void SaveStatus()
+    {
+        bool[] status = new bool[2] {isHaving, isUsing};
+        ES3.Save<bool[]>("paletteItemStatus_" + paletteName, status);
+    }
+
+    void LoadStatus()
+    {
+        if(!ES3.KeyExists("paletteItemStatus_" + paletteName)) return;
+
+        bool[] status = new bool[2];
+        status = ES3.Load<bool[]>("paletteItemStatus_" + paletteName);
+
+        isHaving = status[0];
+        isUsing = status[1];
     }
 }

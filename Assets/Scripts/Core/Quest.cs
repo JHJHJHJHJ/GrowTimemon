@@ -26,7 +26,7 @@ public class Quest : MonoBehaviour
 
     private void Start()
     {
-        UpdateQuestObject();
+        // UpdateQuestObject();
     }
 
     private void Update()
@@ -49,7 +49,7 @@ public class Quest : MonoBehaviour
         UpdateQuestObject();
     }
 
-    void UpdateQuestObject()
+    public void UpdateQuestObject()
     {
         titleText.text = title;
         icon.sprite = iconSprite;

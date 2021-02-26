@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using EasyMobile;
 
 public class QuestManager : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class QuestManager : MonoBehaviour
     QuestResultManager questResultManager;
     ResourceManager resourceManager;
     NotificationManager notificationManager;
+    UserData userData;
     DateTime[] questTime = new DateTime[2];
 
 
@@ -45,17 +47,40 @@ public class QuestManager : MonoBehaviour
 
     private void Start()
     {
-        Quest[] quests = FindObjectsOfType<Quest>();
-        for (int i = 0; i < quests.Length; i++)
-        {
-            questList.Add(quests[i]);
-        }
+        Initialize();
+
         notificationManager.RefreshNotifications(questList);
+    }
+
+    void Initialize()
+    {
+        List<Quest> questList = LoadQuests();
+
+        if(questList == null) return;
+
+        foreach(Quest quest in questList)
+        {
+            Quest newQuest = InstantiateNewQuestObject();
+
+            int[] rewards = new int[2] {(int)quest.rewardGoldAmount, (int)quest.rewardDiaAmount};
+            newQuest.SetupQuest(quest.title, iconSprite, quest.subQuestList, rewards, quest.alarm);
+        }
     }
 
     private void Update()
     {
         ObserveTouchedQuest();
+    }
+
+    public void SaveQuests()
+    {
+        ES3.Save<List<Quest>>("questList", questList);
+    }
+
+    List<Quest> LoadQuests()
+    {
+        if(ES3.KeyExists("questList")) return ES3.Load<List<Quest>>("questList");
+        else return null;
     }
 
     void UpdateCurrentQuest(Quest _questToUpdate)

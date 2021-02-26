@@ -1,11 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EasyMobile;
 
 public class UserData : MonoBehaviour
 {
+    [SerializeField] bool deleteSaveFile = false;
     int gold;
     int dia;  
+
+    private void Awake() 
+    {
+        if(deleteSaveFile)  
+        {
+            ES3.DeleteFile("SaveFile.es3");
+        }  
+    }
+
+    private void Start() 
+    {
+        LoadResources();    
+    }
 
     public int GetGold()
     {
@@ -48,5 +63,19 @@ public class UserData : MonoBehaviour
         }
 
         return canBuy;
+    }
+
+    // SAVE & LOAD
+
+    public void SaveResources()
+    {
+        ES3.Save<int>("gold", gold);
+        ES3.Save<int>("dia", dia);
+    }
+
+    void LoadResources()
+    {
+        if(ES3.KeyExists("gold")) gold = ES3.Load<int>("gold");
+        if(ES3.KeyExists("dia")) dia = ES3.Load<int>("dia");
     }
 }

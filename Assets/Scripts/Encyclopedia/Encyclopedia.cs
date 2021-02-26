@@ -38,20 +38,20 @@ public class Encyclopedia : MonoBehaviour
 
     public void ChangePalette(int _index)
     {
-        UpdatePaletteItems(_index);
+        ChoosePaletteItem(_index);
 
         ColorManager.ChangeColors(_index);
     }
 
-    void UpdatePaletteItems(int _index)
+    void ChoosePaletteItem(int _index)
     {
         for (int i = 0; i < paletteItems.Length; i++)
         {
             bool isUsing = (i == _index);
 
             paletteItems[i].SwitchIsUsing(isUsing);
-            paletteItems[i].UpdateItem();
         }
+        UpdatePaletteItems();
     }
 
     public void OpenWindow()
@@ -61,6 +61,16 @@ public class Encyclopedia : MonoBehaviour
         background.GetComponent<ColorChanger>().ChangeColor();
         characterButton.GetComponent<ColorChanger>().ChangeColor();
         paletteButton.GetComponent<ColorChanger>().ChangeColor();
+
+        UpdatePaletteItems();
+    }
+
+    void UpdatePaletteItems()
+    {
+       foreach(PaletteItem paletteItem in paletteItems)
+       {
+           paletteItem.UpdateItem();
+       } 
     }
 
     public void CloseWindow()

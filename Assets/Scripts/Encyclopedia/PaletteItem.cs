@@ -71,7 +71,7 @@ public class PaletteItem : MonoBehaviour
         }
         else 
         {
-            priceText.color = Color.black;
+            priceIcon.color = Color.black;
             priceText.color = Color.black;
         }
 

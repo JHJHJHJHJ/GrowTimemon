@@ -13,7 +13,7 @@ public class SwipeMenu : MonoBehaviour
     float[] poses;
     float distance = 0f;
 
-    int currentIndex = 0;
+    int currentIndex = 1;
     int maxIndex = 0;
 
     bool canWork = true;

@@ -17,10 +17,18 @@ public class SystemSetUp : MonoBehaviour
         encyclopedia = FindObjectOfType<Encyclopedia>();
     }
 
-    void OnApplicationQuit() 
+    private void OnApplicationQuit() 
     {
         SaveData();
     }   
+
+    private void OnApplicationPause(bool pauseStatus) 
+    {
+        if(pauseStatus)
+        {
+            SaveData();
+        }
+    }
 
     void SaveData()
     {

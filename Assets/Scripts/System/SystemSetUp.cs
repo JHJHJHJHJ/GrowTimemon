@@ -6,6 +6,7 @@ public class SystemSetUp : MonoBehaviour
     UserData userData;
     ColorPalleteHolder colorPaletteHolder;
     Encyclopedia encyclopedia;
+    CharacterManager characterManager;
 
     private void Awake() 
     {
@@ -15,6 +16,7 @@ public class SystemSetUp : MonoBehaviour
         userData = FindObjectOfType<UserData>();
         colorPaletteHolder = FindObjectOfType<ColorPalleteHolder>();
         encyclopedia = FindObjectOfType<Encyclopedia>();
+        characterManager = FindObjectOfType<CharacterManager>();
     }
 
     private void OnApplicationQuit() 
@@ -36,5 +38,6 @@ public class SystemSetUp : MonoBehaviour
         userData.SaveResources();
         colorPaletteHolder.SavePaletteIndex();
         encyclopedia.SavePaletteItemsStatus();
+        characterManager.SaveCharacterData();
     } 
 }

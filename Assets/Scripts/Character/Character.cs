@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    [SerializeField] string characterName = null;
+
     Animator animator;
 
     private void Awake() 
@@ -24,5 +26,15 @@ public class Character : MonoBehaviour
     public void AnimateWork(bool isWorking)
     {
         animator.SetBool("isWorking", isWorking);
+    }
+
+    public void AnimateWait(bool isWaiting)
+    {
+        animator.SetBool("isWaiting", isWaiting);
+    }
+
+    public string GetName()
+    {
+        return characterName;
     }
 }

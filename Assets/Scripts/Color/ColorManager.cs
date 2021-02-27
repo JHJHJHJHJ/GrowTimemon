@@ -14,23 +14,21 @@ public class ColorManager : MonoBehaviour
 
     private void Start() 
     {
-        index = colorPaletteHolder.LoadCurrentPalette();
-        ChangeColors(index);
+        ChangeColors();
     }
 
     private void Update() 
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            ChangeColors(index);
             index++;
+            FindObjectOfType<ColorPalleteHolder>().ChangeCurrentPallete(index);
+            ChangeColors();
         }
     }
 
-    public void ChangeColors(int _index)
+    public void ChangeColors()
     {
-        FindObjectOfType<ColorPalleteHolder>().ChangeCurrentPallete(_index);
-
         foreach(ColorChanger colorChanger in FindObjectsOfType<ColorChanger>())
         {
             colorChanger.ChangeColor();

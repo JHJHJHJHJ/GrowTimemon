@@ -10,7 +10,7 @@ public class ColorPalleteHolder : MonoBehaviour
 
     void Awake()
     {
-
+        LoadCurrentPalette();
     }
 
     public void ChangeCurrentPallete(int _index)

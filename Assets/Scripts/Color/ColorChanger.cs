@@ -53,6 +53,12 @@ public class ColorChanger : MonoBehaviour
         TextMeshProUGUI text = GetComponent<TextMeshProUGUI>();
         text.color = colorPalleteHolder.GetColor(_colorvalue);
     }
+
+    public void ChangeColorValueTo(ColorValue _colorValue)
+    {
+        defaultColorValue = _colorValue;
+        ChangeColor();
+    }
 }
 
 public enum ComponentType

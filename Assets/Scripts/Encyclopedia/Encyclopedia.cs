@@ -13,16 +13,26 @@ public class Encyclopedia : MonoBehaviour
     [SerializeField] ProceduralImage characterButton = null;
     [SerializeField] ProceduralImage paletteButton = null;
 
+    [Header("Character")]
+    [SerializeField] GameObject characterView = null;
+    [SerializeField] CharacterItem[] characterItems = null;
+
     [Header("Palette")]
+    [SerializeField] GameObject paletteView = null;
     [SerializeField] PaletteItem[] paletteItems = null;
+    int currentIndex = 0;
 
     UserData userData;
-    ColorManager ColorManager;
+    ColorManager colorManager;
+    ColorPalleteHolder colorPalleteHolder;
+    CharacterManager characterManager;
 
     private void Awake() 
     {
         userData = FindObjectOfType<UserData>();    
-        ColorManager = FindObjectOfType<ColorManager>();
+        colorManager = FindObjectOfType<ColorManager>();
+        colorPalleteHolder = FindObjectOfType<ColorPalleteHolder>();
+        characterManager = FindObjectOfType<CharacterManager>();
     }
 
     public void BuyPaletteItem(int _index)
@@ -40,7 +50,8 @@ public class Encyclopedia : MonoBehaviour
     {
         ChoosePaletteItem(_index);
 
-        ColorManager.ChangeColors(_index);
+        FindObjectOfType<ColorPalleteHolder>().ChangeCurrentPallete(_index);
+        colorManager.ChangeColors();
     }
 
     void ChoosePaletteItem(int _index)
@@ -63,6 +74,7 @@ public class Encyclopedia : MonoBehaviour
         paletteButton.GetComponent<ColorChanger>().ChangeColor();
 
         UpdatePaletteItems();
+        UpdateCharacterItems();
     }
 
     void UpdatePaletteItems()
@@ -83,6 +95,53 @@ public class Encyclopedia : MonoBehaviour
         foreach(PaletteItem paletteItem in paletteItems)
         {
             paletteItem.SaveStatus();
+        }
+    }
+
+    public void OpenPaletteView()
+    {
+        if(paletteView.activeSelf) return;
+
+        characterButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+        paletteButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidDark);
+
+        characterView.SetActive(false);
+        paletteView.SetActive(true);
+
+        UpdatePaletteItems();
+    }
+
+    public void OpenCharacterView()
+    {
+        if(!paletteView.activeSelf) return;
+
+        characterButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidDark);
+        paletteButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+
+        characterView.SetActive(true);
+        paletteView.SetActive(false);
+
+        UpdateCharacterItems();
+        colorManager.ChangeColors();
+    }   
+
+    void UpdateCharacterItems()
+    {
+        foreach(CharacterItem characterItem in characterItems)
+        {
+            characterItem.UpdateItem();
+        }
+    }
+
+    public void ChooseCharacter(int _index)
+    {
+        bool isHaving = characterManager.GetCharacterIsHaving(_index);
+        bool isUsing = ( characterManager.currentIndex == _index );
+
+        if(isHaving && !isUsing)
+        {
+            characterManager.ChooseThisCharacter(_index);
+            UpdateCharacterItems();
         }
     }
 }

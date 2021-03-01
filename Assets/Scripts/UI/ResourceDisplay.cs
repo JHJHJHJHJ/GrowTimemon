@@ -15,7 +15,7 @@ public class ResourceDisplay : MonoBehaviour
 
     private void Update() 
     {
-         UpdateResourceText();
+        UpdateResourceText();
     }
 
     public void UpdateResourceText()

@@ -15,7 +15,5 @@ public class ResourceManager : MonoBehaviour
     {
         userData.AddGold(_goldAmount);
         userData.AddDia(_diaAmount);
-
-        resourceDisplay.UpdateResourceText();
     }
 }

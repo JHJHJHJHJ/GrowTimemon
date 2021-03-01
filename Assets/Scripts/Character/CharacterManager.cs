@@ -77,6 +77,11 @@ public class CharacterManager : MonoBehaviour
 
         if(ES3.KeyExists("characterIndex")) currentIndex = ES3.Load<int>("characterIndex");     
     }
+
+    public Character GetCharacter(int _index)
+    {
+        return characterCollectables[_index].character;
+    }
 }
 
 [System.Serializable]

@@ -92,7 +92,7 @@ public class Gacha : MonoBehaviour
     public void GetReward()
     {
         getReward_D();
-        CloseGachaWindow();
+        OpenGachaWindow();
     }
 
     void GetCharacter()

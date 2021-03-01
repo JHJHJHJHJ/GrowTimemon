@@ -691,7 +691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ab7d52aaa133244a3ae64245b16554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: "\uBA4D\uBA4D\uC774"
+  characterName: "\uBB49\uBB49\uC774"
 --- !u!95 &5334967655356268853
 Animator:
   serializedVersion: 3

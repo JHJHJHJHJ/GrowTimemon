@@ -85,8 +85,6 @@ public class Timer : MonoBehaviour
         isTimeOver = true;
 
         timerSlider.GetComponent<Animator>().SetBool("TimeOver", true);
-
-        FindObjectOfType<HapticPlayer>().PlayTimeOverHaptic();
     }
 
     void UpdateTimerUI()

@@ -189,7 +189,6 @@ public class QuestManager : MonoBehaviour
     void MoveToNextSubQuest()
     {
         FindObjectOfType<Character>().AnimateComplete();
-        FindObjectOfType<HapticPlayer>().PlayCompleteHaptic();
 
         if (currentSubquestIndex >= currentQuest.subQuestList.Count - 1) // 마지막일 때
         {

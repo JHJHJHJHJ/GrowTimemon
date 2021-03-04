@@ -82,6 +82,11 @@ public class CharacterManager : MonoBehaviour
     {
         return characterCollectables[_index].character;
     }
+
+    public Character GetCurrentCharacter()
+    {
+        return currentCharacter;
+    }
 }
 
 [System.Serializable]

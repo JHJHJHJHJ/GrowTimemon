@@ -89,6 +89,7 @@ public class Gacha : MonoBehaviour
 
         getReward_D = new GetReward_D(GetGold);
     }
+    
     public void GetReward()
     {
         getReward_D();

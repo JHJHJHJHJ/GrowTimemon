@@ -5,9 +5,9 @@ using UnityEngine;
 public class QuestEditor : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] int checkerGoldWeight = 20;
-    [SerializeField] int timerGoldConstant = 10;
-    [SerializeField] float secondGoldWeight = 0.1f;
+    [SerializeField] int checkerGoldConstant = 20;
+    [SerializeField] int timerGoldConstant = 20;
+    [SerializeField] float minuteGoldWeight = 1f;
 
     [Header("References")]
     [SerializeField] QuestWindow questWindow = null;
@@ -28,7 +28,8 @@ public class QuestEditor : MonoBehaviour
     {
         currentQuest = null;
         currentRewards = new int[2] { 0, 0 };
-        alarmToEdit = null;
+        alarmToEdit = new Alarm();
+        alarmToEdit.hasAlarm = false;
     }
 
     public void AddNewSubquestPlate() // 버튼에서 실행됨
@@ -82,17 +83,17 @@ public class QuestEditor : MonoBehaviour
                 float time = 0f;
                 float.TryParse(plate.inputField_time.text, out time);
 
-                amountToAdd = (int)(time * secondGoldWeight) + timerGoldConstant;
+                amountToAdd = (int)(time * minuteGoldWeight) + timerGoldConstant;
             }
             else
             {
-                amountToAdd = checkerGoldWeight;
+                amountToAdd = checkerGoldConstant;
             }
 
             currentRewards[0] += amountToAdd;
         }
 
-        questWindow.UpdateRewardsUI(currentRewards[0], currentRewards[1]);
+        questWindow.UpdateRewardsUI(currentRewards[0], alarmToEdit.hasAlarm);
     }
 
     void ObservePlatesToOpenDelete()

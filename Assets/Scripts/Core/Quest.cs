@@ -2,35 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.ProceduralImage;
 using TMPro;
+using System;
 
 public class Quest : MonoBehaviour
 {
     [Header("Quest Info")]
+    public int id = 0;
     public string title = null;
     public Sprite iconSprite = null;
     public List<SubQuest> subQuestList = new List<SubQuest>();
     public float rewardGoldAmount = 0;
     public float rewardDiaAmount = 0;
-    bool isTimeLimit = false;
     public Alarm alarm;
 
+    bool hasCleared = false;
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI titleText = null;
     [SerializeField] Image icon = null;
     [SerializeField] GameObject timeLimit = null;
+    [SerializeField] ColorChanger timeLimitBackground = null;
     [SerializeField] TextMeshProUGUI timeText = null;
+    [SerializeField] GameObject hasClearedMarker = null;
 
     [HideInInspector] public bool hasClicked = false;
 
-    private void Start()
+    bool inSwitch = true;
+    bool outSwitch = true;
+
+    private void Update() 
     {
-        // UpdateQuestObject();
+        UpdateTimeLimit();    
     }
 
-    private void Update()
+    public void SetID(int _id)
     {
+        id = _id;
     }
 
     public void SetupQuest(string _title, Sprite _iconSprite, List<SubQuest> _subQuestList, int[] _rewardAmounts, Alarm _alarm)
@@ -46,6 +55,8 @@ public class Quest : MonoBehaviour
         rewardGoldAmount = _rewardAmounts[0];
         rewardDiaAmount = _rewardAmounts[1];
 
+        SetHasCleard(LoadHasCleared());
+
         UpdateQuestObject();
     }
 
@@ -56,12 +67,12 @@ public class Quest : MonoBehaviour
 
         if(alarm != null && alarm.hasAlarm)
         {
-            timeLimit.SetActive(true);
+            timeLimit.gameObject.SetActive(true);
             timeText.text = alarm.hour + ":" + alarm.minute.ToString("D2") + " " + alarm.noon;
         }
         else
         {
-            timeLimit.SetActive(false);
+            timeLimit.gameObject.SetActive(false);
         }
     }
 
@@ -77,6 +88,88 @@ public class Quest : MonoBehaviour
         foreach (SubQuest subQuest in subQuestList)
         {
             subQuest.SetCompleteTimeDifference(0);
+        }
+    }
+
+    void UpdateTimeLimit()
+    {
+        if(alarm == null || !alarm.hasAlarm) return;
+
+        if(IsRightTime(alarm))
+        {
+            if(inSwitch)
+            {
+                GetComponent<Animator>().SetBool("IsRightTime", true); 
+                timeLimitBackground.ChangeColorValueTo(ColorValue.Mid);
+                timeText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.White);
+
+                inSwitch = false;
+                outSwitch = true;
+            }
+        }
+        else
+        {
+            if(outSwitch)
+            {
+                GetComponent<Animator>().SetBool("IsRightTime", false);
+                timeLimitBackground.ChangeColorValueTo(ColorValue.Light);
+                timeText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Mid);
+
+                inSwitch = true;
+                outSwitch = false;
+
+                print("OUT");
+            }
+        }
+    }
+
+    bool IsRightTime(Alarm _alarm)
+    {
+        int hour = _alarm.hour;
+        if (hour == 12)
+        {
+            if (_alarm.noon == Noon.AM) hour = 0;
+        }
+        else if (_alarm.noon == Noon.PM)
+        {
+            hour += 12;
+        }
+
+        DateTime dateTime = new DateTime(
+        DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
+        hour, _alarm.minute, 0);
+
+        DateTime before10m = dateTime.AddMinutes(-10d);
+        DateTime after10m = dateTime.AddMinutes(10d);
+
+        return (before10m <= DateTime.Now && DateTime.Now <= after10m);
+    }
+
+    public void SetHasCleard(bool _hasCleared)
+    {
+        hasCleared = _hasCleared;
+        hasClearedMarker.SetActive(_hasCleared);
+    }
+
+    public bool GetHasCleard()
+    {
+        return hasCleared;
+    }
+
+    public void SaveHasCleard()
+    {
+        ES3.Save<bool>("HasCleard_" + id.ToString(), hasCleared);
+    }
+
+    bool LoadHasCleared()
+    {
+        if(ES3.KeyExists("HasCleard_" + id.ToString()))
+        {
+            return ES3.Load<bool>("HasCleard_" + id.ToString());
+        }
+        else
+        {
+            return hasCleared;
         }
     }
 }

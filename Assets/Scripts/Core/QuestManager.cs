@@ -7,7 +7,7 @@ using EasyMobile;
 public class QuestManager : MonoBehaviour
 {
     [Header("Status")]
-    [SerializeField] bool isOnTheQuest = false;
+    public bool isOnTheQuest = false;
 
     [Header("Quest List")]
     [SerializeField] List<Quest> questList = new List<Quest>();
@@ -36,6 +36,7 @@ public class QuestManager : MonoBehaviour
     UserData userData;
     DateTime[] questTime = new DateTime[2];
 
+    int nextID = 0;
 
     private void Awake()
     {
@@ -54,7 +55,14 @@ public class QuestManager : MonoBehaviour
 
     void Initialize()
     {
+        LoadNextID();
+
         List<Quest> questList = LoadQuests();
+
+        foreach(ES3InspectorInfo trash in FindObjectsOfType<ES3InspectorInfo>())
+        {
+            Destroy(trash.gameObject);
+        }
 
         if(questList == null) return;
 
@@ -63,6 +71,7 @@ public class QuestManager : MonoBehaviour
             Quest newQuest = InstantiateNewQuestObject();
 
             int[] rewards = new int[2] {(int)quest.rewardGoldAmount, (int)quest.rewardDiaAmount};
+            newQuest.SetID(quest.id);
             newQuest.SetupQuest(quest.title, iconSprite, quest.subQuestList, rewards, quest.alarm);
         }
     }
@@ -242,6 +251,35 @@ public class QuestManager : MonoBehaviour
         FindObjectOfType<Character>().AnimateWork(false);
     }
 
+    public void ResetQuestsHasCleared()
+    {
+        foreach(Quest quest in questList)
+        {
+            quest.SetHasCleard(false);
+        }
+    }
+
+    public void SaveQuestsHasCleard()
+    {
+        foreach(Quest quest in questList)
+        {
+            quest.SaveHasCleard();
+        }
+    }
+
+    public void SaveNextID()
+    {
+        ES3.Save<int>("NextID", nextID);
+    }
+
+    void LoadNextID()
+    {
+        if(ES3.KeyExists("NextID"))
+        {
+            nextID = ES3.Load<int>("NextID");
+        }
+    }
+
     //EDIT
 
     public void ConfirmEdit()
@@ -251,6 +289,7 @@ public class QuestManager : MonoBehaviour
         if(questWindow.isCreating)
         {
             Quest newQuest = InstantiateNewQuestObject();
+            newQuest.SetID(GetNextID());
             questEditor.PasteEditedQuest(newQuest, iconSprite);
             UpdateCurrentQuest(newQuest);
             questWindow.isCreating = false;
@@ -284,8 +323,15 @@ public class QuestManager : MonoBehaviour
         return newQuest;
     }
 
+    int GetNextID()
+    {
+        nextID++;
+        return (nextID - 1);
+    }
+
     public void DeleteCurrentQuest() // Yes 버튼에서 실행됨
     {
+        ES3.DeleteKey("HasCleard_" + currentQuest.id);
         questList.Remove(currentQuest);
         Destroy(currentQuest.gameObject);
 

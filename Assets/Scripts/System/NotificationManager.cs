@@ -25,8 +25,14 @@ public class NotificationManager : MonoBehaviour
         NotificationContent content = PrepareNotificationContent(_quest);
 
         int hour = _quest.alarm.hour;
-        if(_quest.alarm.noon == Noon.PM) hour = _quest.alarm.hour + 12;
-        else hour = _quest.alarm.hour;
+        if (hour == 12)
+        {
+            if (_quest.alarm.noon == Noon.AM) hour = 0;
+        }
+        else if (_quest.alarm.noon == Noon.PM)
+        {
+            hour += 12;
+        }
 
         DateTime dateTimeAlarm = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 
             hour, _quest.alarm.minute, 0);

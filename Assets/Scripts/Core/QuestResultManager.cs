@@ -80,28 +80,38 @@ public class QuestResultManager : MonoBehaviour
 
     void CalculateRewards()
     {
-        float gold = currentQuest.rewardGoldAmount;
-        float dia = currentQuest.rewardDiaAmount;
+        if(currentQuest.GetHasCleard())
+        {
+            rewards[0] = 0;
+            rewards[1] = 0;
+        }
+        else
+        {
+            float gold = currentQuest.rewardGoldAmount;
+            float dia = currentQuest.rewardDiaAmount;
 
-        if(resultWindow.additionalGoals[0].isAchieved) 
-        {
-            dia += 50f;
-        }
-        if(resultWindow.additionalGoals[1].isAchieved) 
-        {
-            gold *= 1.2f;
-        }
-        if(resultWindow.additionalGoals[2].isAchieved) 
-        {
-            gold *= 1.2f;
-        }
+            if(resultWindow.additionalGoals[0].isAchieved) 
+            {
+                dia += 50f;
+            }
+            if(resultWindow.additionalGoals[1].isAchieved) 
+            {
+                gold *= 1.2f;
+            }
+            if(resultWindow.additionalGoals[2].isAchieved) 
+            {
+                gold *= 1.2f;
+            }
 
-        rewards[0] = (int)gold;
-        rewards[1] = (int)dia;
+            rewards[0] = (int)gold;
+            rewards[1] = (int)dia;
+        }
     }
 
-    public void GetRewards()
+    public void GetRewards() // 버튼에서 실행됨
     {
+        currentQuest.SetHasCleard(true);
+
         FindObjectOfType<ResourceManager>().TakeReward(rewards[0], rewards[1]);
         CloseResultWindow();
     }

@@ -29,7 +29,12 @@ public class AlarmSetWindow : MonoBehaviour
         {
             SwitchAlarm(false);
 
-            if (DateTime.Now.Hour > 12)
+            if (DateTime.Now.Hour == 12)
+            {
+                alarmToSet.hour = DateTime.Now.Hour;
+                SwitchNoon(Noon.PM);
+            }
+            else if (DateTime.Now.Hour > 12)
             {
                 alarmToSet.hour = DateTime.Now.Hour - 12;
                 SwitchNoon(Noon.PM);

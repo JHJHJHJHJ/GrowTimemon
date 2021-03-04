@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.UI.ProceduralImage;
+using System;
 
 public class QuestWindow : MonoBehaviour
 {
@@ -13,12 +15,14 @@ public class QuestWindow : MonoBehaviour
 
     [Header("Info")]
     [SerializeField] TextMeshProUGUI titleText = null;
-    [SerializeField] GameObject StartTime = null;
+    [SerializeField] ProceduralImage StartTime = null;
     [SerializeField] TextMeshProUGUI timeText = null;
     [SerializeField] GameObject gold = null;
     [SerializeField] TextMeshProUGUI goldAmountText = null;
     [SerializeField] GameObject dia = null;
+    [SerializeField] Image diaImage = null;
     [SerializeField] TextMeshProUGUI diaAmountText = null;
+    [SerializeField] GameObject noMoreReward = null;
 
     [Header("Subquest")]
     [SerializeField] Transform subquestsParent = null;
@@ -32,7 +36,7 @@ public class QuestWindow : MonoBehaviour
     [Header("Editor")]
     [SerializeField] TMP_InputField inputField_title = null;
     [SerializeField] Image editButton = null;
-    [SerializeField] Button addAlarmButton = null; 
+    [SerializeField] Button addAlarmButton = null;
     [SerializeField] TextMeshProUGUI alarmSetText = null;
     [SerializeField] GameObject subquestAddButton = null;
     [SerializeField] Image confirmButton = null;
@@ -41,15 +45,23 @@ public class QuestWindow : MonoBehaviour
     [SerializeField] GameObject questDeletePopUp = null;
     [SerializeField] AlarmSetWindow alarmSetWindow = null;
 
+    Quest currentQuest;
+
+    bool inSwitch = true;
+    bool outSwitch = true;
+
     private void Update()
     {
         UpdateConfirmButton();
+        UpdateTimeLimitUI();
     }
 
     public void OpenDetailWindow(Quest _quest)
     {
         isCreating = false;
         isEditing = false;
+
+        currentQuest = _quest;
 
         foreach (SubquestPlate subquestPlate in FindObjectsOfType<SubquestPlate>())
         {
@@ -58,6 +70,7 @@ public class QuestWindow : MonoBehaviour
 
         SwitchEditor(false);
         editButton.gameObject.SetActive(true);
+        UpdateHasCleardReward(_quest.GetHasCleard());
 
         UpdateQuestInfo(_quest);
         UpdateAlarmUI(_quest.alarm);
@@ -82,8 +95,10 @@ public class QuestWindow : MonoBehaviour
         SwitchEditor(true);
         editButton.gameObject.SetActive(false);
         UpdateAlarmUI(new Alarm());
+        noMoreReward.SetActive(false);
 
         goldAmountText.text = 0.ToString();
+
         dia.SetActive(false);
         diaAmountText.text = 0.ToString();
     }
@@ -101,20 +116,25 @@ public class QuestWindow : MonoBehaviour
 
         subquestAddButton.SetActive(_isEditing);
 
-        if(_isEditing) 
+        if (_isEditing)
         {
             editButton.color = new Color32(255, 255, 255, 255);
-            if(!isCreating) questDeleteButton.SetActive(true);
+            if (!isCreating) questDeleteButton.SetActive(true);
             else questDeleteButton.SetActive(false);
+
+            diaImage.color = Color.black;
+            diaAmountText.color = Color.black;
         }
-        else 
+        else
         {
             editButton.color = new Color32(255, 255, 255, 40);
             questDeleteButton.SetActive(false);
         }
 
-        StartTime.SetActive(!isEditing);
+        StartTime.gameObject.SetActive(!isEditing);
         addAlarmButton.gameObject.SetActive(isEditing);
+
+        if(!isCreating) UpdateHasCleardReward(currentQuest.GetHasCleard());
     }
 
     public void UpdateQuestInfoToEdit(Quest _quest)
@@ -129,7 +149,7 @@ public class QuestWindow : MonoBehaviour
         foreach (SubquestPlate plate in plateList)
         {
             plate.SwitchEditMode(isEditing);
-            if(isEditing) plate.UpdateEditInfo(_quest.subQuestList[plate.index]);
+            if (isEditing) plate.UpdateEditInfo(_quest.subQuestList[plate.index]);
         }
     }
 
@@ -137,7 +157,8 @@ public class QuestWindow : MonoBehaviour
     {
         titleText.text = _quest.title;
 
-        UpdateRewardsUI((int)_quest.rewardGoldAmount, (int)_quest.rewardDiaAmount);
+        UpdateRewardsUI((int)_quest.rewardGoldAmount, _quest.alarm.hasAlarm);
+        UpdateTimeLimitUI();
     }
 
     void InstantiateCurrentSubquestPlates(Quest _quest)
@@ -155,12 +176,12 @@ public class QuestWindow : MonoBehaviour
         subquestAddButton.transform.SetAsLastSibling();
     }
 
-    
+
     public void UpdatePlatesIndex()
     {
-        for(int i = 0; i < plateList.Count; i++)
+        for (int i = 0; i < plateList.Count; i++)
         {
-            plateList[i].index = i;   
+            plateList[i].index = i;
         }
     }
 
@@ -223,15 +244,18 @@ public class QuestWindow : MonoBehaviour
         return inputField_title.text;
     }
 
-    public void UpdateRewardsUI(int _goldAmount, int _diaAmount)
+    public void UpdateRewardsUI(int _goldAmount, bool _hasAlarm)
     {
-        if (_diaAmount <= 0) dia.SetActive(false);
-        else
+        if (_hasAlarm)
         {
             dia.SetActive(true);
-            diaAmountText.text = _diaAmount.ToString();
+            diaAmountText.text = 50.ToString();
         }
-        
+        else
+        {
+            dia.SetActive(false);
+        }
+
         goldAmountText.text = _goldAmount.ToString();
     }
 
@@ -268,7 +292,7 @@ public class QuestWindow : MonoBehaviour
 
     public void UpdateAlarmUI(Alarm _alarm)
     {
-        if(_alarm != null && _alarm.hasAlarm)
+        if (_alarm != null && _alarm.hasAlarm)
         {
             timeText.text = _alarm.hour + ":" + _alarm.minute.ToString("D2") + " " + _alarm.noon;
             alarmSetText.text = _alarm.hour + ":" + _alarm.minute.ToString("D2") + " " + _alarm.noon;
@@ -278,22 +302,92 @@ public class QuestWindow : MonoBehaviour
             alarmSetText.text = "+ 시작 시간";
         }
 
-        if(isEditing)
+        if (isEditing)
         {
-            StartTime.SetActive(!isEditing);
+            StartTime.gameObject.SetActive(!isEditing);
             addAlarmButton.gameObject.SetActive(isEditing);
         }
         else
         {
             addAlarmButton.gameObject.SetActive(isEditing);
-            if(_alarm != null && _alarm.hasAlarm)
+            if (_alarm != null && _alarm.hasAlarm)
             {
-                StartTime.SetActive(true);
+                StartTime.gameObject.SetActive(true);
             }
             else
             {
-                StartTime.SetActive(false);
+                StartTime.gameObject.SetActive(false);
             }
+        }
+    }
+
+    void UpdateTimeLimitUI()
+    {
+        if (isEditing || !currentQuest.alarm.hasAlarm) return;
+
+        if (IsRightTime(currentQuest.alarm))
+        {
+            if (inSwitch)
+            {
+                diaImage.color = Color.black;
+                diaAmountText.color = Color.black;
+
+                StartTime.color = new Color32(191, 191, 191, 255);
+                timeText.color = Color.black;
+
+                inSwitch = false;
+                outSwitch = true;
+            }
+
+        }
+        else
+        {
+            if (outSwitch)
+            {
+                diaImage.color = new Color32(200, 200, 200, 255);
+                diaAmountText.color = new Color32(200, 200, 200, 255);
+
+                StartTime.color = new Color32(235, 235, 235, 255);
+                timeText.color = Color.white;
+
+                inSwitch = true;
+                outSwitch = false;
+            }
+
+        }
+    }
+
+    bool IsRightTime(Alarm _alarm)
+    {
+        int hour = _alarm.hour;
+        if (hour == 12)
+        {
+            if (_alarm.noon == Noon.AM) hour = 0;
+        }
+        else if (_alarm.noon == Noon.PM)
+        {
+            hour += 12;
+        }
+
+        DateTime dateTime = new DateTime(
+        DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
+        hour, _alarm.minute, 0);
+
+        DateTime before10m = dateTime.AddMinutes(-10d);
+        DateTime after10m = dateTime.AddMinutes(10d);
+
+        return (before10m <= DateTime.Now && DateTime.Now <= after10m);
+    }
+
+    void UpdateHasCleardReward(bool _hasCleared)
+    {
+        if(_hasCleared && !isEditing)
+        {
+            noMoreReward.SetActive(true);
+        }
+        else
+        {
+            noMoreReward.SetActive(false);
         }
     }
 }

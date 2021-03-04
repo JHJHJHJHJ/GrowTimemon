@@ -208,7 +208,7 @@ public class QuestResultWindow : MonoBehaviour
         }
     }
 
-    bool IsRightTime(Alarm _alarm)
+    public bool IsRightTime(Alarm _alarm)
     {
         int hour = _alarm.hour;
         if(hour == 12)
@@ -229,6 +229,7 @@ public class QuestResultWindow : MonoBehaviour
 
         return (before10m <= DateTime.Now && DateTime.Now <= after10m);
     }
+    
     public void UpdateRewards(int _gold, int _dia)
     {
         gold.gameObject.SetActive(true);

@@ -71,7 +71,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1013129489972373971
 RectTransform:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48235297, g: 0.48235297, b: 0.48235297, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.2}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 8553461547637734070}
   - component: {fileID: 6754004260476324975}
   - component: {fileID: 6042934649810751500}
+  - component: {fileID: 4892700493785867651}
   m_Layer: 5
   m_Name: Timer Background
   m_TagString: Untagged
@@ -331,6 +332,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 50
+--- !u!114 &4892700493785867651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865517249762882601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99307ac9db632a845b4aa046bfdda8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColorValue: 2
+  componentType: 0
 --- !u!1 &2464056925736942900
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,6 +358,7 @@ GameObject:
   - component: {fileID: 3876801394784975940}
   - component: {fileID: 6394962532621944475}
   - component: {fileID: 2780443068024175455}
+  - component: {fileID: 5993558229642518279}
   m_Layer: 5
   m_Name: Checker Background
   m_TagString: Untagged
@@ -420,6 +436,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffade7edb5b1df45a6c3642149606c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5993558229642518279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2464056925736942900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99307ac9db632a845b4aa046bfdda8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColorValue: 1
+  componentType: 0
 --- !u!1 &3117891587088208419
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +462,7 @@ GameObject:
   - component: {fileID: 3666495671669841238}
   - component: {fileID: 3318809655395999141}
   - component: {fileID: 1824012535627728429}
+  - component: {fileID: 4322581144752843470}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -495,8 +526,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2150773298
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+    rgba: 4292467161
+  m_fontColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
@@ -575,6 +606,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4322581144752843470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3117891587088208419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99307ac9db632a845b4aa046bfdda8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColorValue: 2
+  componentType: 2
 --- !u!1 &4244526040205334084
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,14 +681,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.14901961}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.2}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 3f91331724a9da84197e9b6d94f0483c, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -670,7 +715,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1090,7 +1135,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4291348680
-  m_fontColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.8}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1161,6 +1206,7 @@ GameObject:
   - component: {fileID: 1368575282385160381}
   - component: {fileID: 7411156500801502408}
   - component: {fileID: 53292023601994999}
+  - component: {fileID: 3616620176884406205}
   m_Layer: 5
   m_Name: Timer Toggle
   m_TagString: Untagged
@@ -1278,6 +1324,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3616620176884406205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893114292795502916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99307ac9db632a845b4aa046bfdda8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColorValue: 2
+  componentType: 1
 --- !u!1 &6071845845877021838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,6 +1536,7 @@ GameObject:
   - component: {fileID: 1608247287902651625}
   - component: {fileID: 6603633972993330920}
   - component: {fileID: 8760007497957934271}
+  - component: {fileID: 4530178301873466899}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -1539,8 +1600,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2150773298
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+    rgba: 4292467161
+  m_fontColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
@@ -1619,6 +1680,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4530178301873466899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7077854116550030123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99307ac9db632a845b4aa046bfdda8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColorValue: 2
+  componentType: 2
 --- !u!1 &7754010230241935643
 GameObject:
   m_ObjectHideFlags: 0

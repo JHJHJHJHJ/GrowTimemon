@@ -15,10 +15,6 @@ public class ColorChanger : MonoBehaviour
     private void Awake() 
     {
         colorPalleteHolder = FindObjectOfType<ColorPalleteHolder>();    
-    }
-
-    private void Start() 
-    {
         ChangeColor();
     }
 
@@ -39,19 +35,25 @@ public class ColorChanger : MonoBehaviour
     void ChangePImageColor(ColorValue _colorvalue)
     {
         ProceduralImage pImage = GetComponent<ProceduralImage>();
-        pImage.color = colorPalleteHolder.GetColor(_colorvalue);
+        float alpha = pImage.color.a;
+        Color colorToChange = colorPalleteHolder.GetColor(_colorvalue);
+        pImage.color = new Color (colorToChange.r, colorToChange.g, colorToChange.b, alpha);
     }
 
     void ChangeImageColor(ColorValue _colorvalue)
     {
         Image image = GetComponent<Image>();
-        image.color = colorPalleteHolder.GetColor(_colorvalue);
+        float alpha = image.color.a;
+        Color colorToChange = colorPalleteHolder.GetColor(_colorvalue);
+        image.color = new Color (colorToChange.r, colorToChange.g, colorToChange.b, alpha);
     }
 
     void ChangeTextColor(ColorValue _colorvalue)
     {
         TextMeshProUGUI text = GetComponent<TextMeshProUGUI>();
-        text.color = colorPalleteHolder.GetColor(_colorvalue);
+        float alpha = text.color.a;
+        Color colorToChange = colorPalleteHolder.GetColor(_colorvalue);
+        text.color = new Color (colorToChange.r, colorToChange.g, colorToChange.b, alpha);
     }
 
     public void ChangeColorValueTo(ColorValue _colorValue)

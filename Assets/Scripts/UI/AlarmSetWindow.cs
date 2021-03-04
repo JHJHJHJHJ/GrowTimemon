@@ -60,25 +60,29 @@ public class AlarmSetWindow : MonoBehaviour
         minuteInput.text = alarmToSet.minute.ToString();
 
         UpdateExplanationText();
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     public void ToggleAlarm()
     {
         alarmToSet.hasAlarm = !alarmToSet.hasAlarm;
         SwitchAlarm(alarmToSet.hasAlarm);
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     void SwitchAlarm(bool _hasAlarm)
     {
         if (_hasAlarm)
         {
-            alarmButton.GetComponent<Image>().color = new Color32(0, 0, 0, 255);
+            alarmButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
             titleText.text = "알림 시간을 설정하세요.";
             bottom.gameObject.SetActive(true);
         }
         else
         {
-            alarmButton.GetComponent<Image>().color = new Color32(230, 230, 230, 255);
+            alarmButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
             titleText.text = "알림을 설정하고 추가 보상을 받으세요.";
             bottom.gameObject.SetActive(false);
         }
@@ -98,18 +102,24 @@ public class AlarmSetWindow : MonoBehaviour
 
     public void SwitchToAM()
     {
-        pmText.color = new Color32(204, 204, 204, 255);
-        amText.color = Color.black;
-
         alarmToSet.noon = Noon.AM;
+
+        if (pmText.IsActive())
+        {
+            pmText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+            amText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
+        }
     }
 
     public void SwitchToPM()
     {
-        pmText.color = Color.black;
-        amText.color = new Color32(204, 204, 204, 255);
-
         alarmToSet.noon = Noon.PM;
+
+        if (pmText.IsActive())
+        {
+            pmText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
+            amText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+        }
     }
 
     public Alarm GetAlarmSetting()

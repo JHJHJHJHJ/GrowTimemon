@@ -75,6 +75,8 @@ public class QuestWindow : MonoBehaviour
         UpdateQuestInfo(_quest);
         UpdateAlarmUI(_quest.alarm);
         InstantiateCurrentSubquestPlates(_quest);
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     public void OpenCreateWindow()
@@ -90,7 +92,6 @@ public class QuestWindow : MonoBehaviour
         }
 
         confirmButton.gameObject.SetActive(true);
-        confirmButton.color = Color.gray;
 
         SwitchEditor(true);
         editButton.gameObject.SetActive(false);
@@ -101,6 +102,8 @@ public class QuestWindow : MonoBehaviour
 
         dia.SetActive(false);
         diaAmountText.text = 0.ToString();
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     public void SwitchEditor(bool _isEditing)
@@ -118,7 +121,7 @@ public class QuestWindow : MonoBehaviour
 
         if (_isEditing)
         {
-            editButton.color = new Color32(255, 255, 255, 255);
+            editButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
             if (!isCreating) questDeleteButton.SetActive(true);
             else questDeleteButton.SetActive(false);
 
@@ -127,7 +130,7 @@ public class QuestWindow : MonoBehaviour
         }
         else
         {
-            editButton.color = new Color32(255, 255, 255, 40);
+            editButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
             questDeleteButton.SetActive(false);
         }
 
@@ -135,6 +138,8 @@ public class QuestWindow : MonoBehaviour
         addAlarmButton.gameObject.SetActive(isEditing);
 
         if(!isCreating) UpdateHasCleardReward(currentQuest.GetHasCleard());
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     public void UpdateQuestInfoToEdit(Quest _quest)
@@ -212,9 +217,9 @@ public class QuestWindow : MonoBehaviour
 
         if (CanConfirm())
         {
-            confirmButton.color = Color.black;
+            confirmButton.GetComponent<ColorChanger>().ChangeColorTo(ColorValue.Dark);
         }
-        else confirmButton.color = Color.gray;
+        else confirmButton.GetComponent<ColorChanger>().ChangeColorTo(ColorValue.MidLight);
     }
 
     public bool CanConfirm()
@@ -323,17 +328,17 @@ public class QuestWindow : MonoBehaviour
 
     void UpdateTimeLimitUI()
     {
-        if (isEditing || !currentQuest.alarm.hasAlarm) return;
+        if (!currentQuest || isEditing || !currentQuest.alarm.hasAlarm) return;
 
         if (IsRightTime(currentQuest.alarm))
         {
             if (inSwitch)
             {
-                diaImage.color = Color.black;
-                diaAmountText.color = Color.black;
+                diaImage.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
+                diaAmountText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
 
-                StartTime.color = new Color32(191, 191, 191, 255);
-                timeText.color = Color.black;
+                StartTime.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Mid);
+                timeText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.White);
 
                 inSwitch = false;
                 outSwitch = true;
@@ -344,11 +349,11 @@ public class QuestWindow : MonoBehaviour
         {
             if (outSwitch)
             {
-                diaImage.color = new Color32(200, 200, 200, 255);
-                diaAmountText.color = new Color32(200, 200, 200, 255);
+                diaImage.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+                diaAmountText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
 
-                StartTime.color = new Color32(235, 235, 235, 255);
-                timeText.color = Color.white;
+                StartTime.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+                timeText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.White);
 
                 inSwitch = true;
                 outSwitch = false;

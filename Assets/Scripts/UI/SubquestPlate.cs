@@ -30,10 +30,10 @@ public class SubquestPlate : MonoBehaviour
     bool isHolding = false;
     float currentHoldTime = 0f;
 
-
     private void Update()
     {
         WaitInputHold();
+        RestrictMinutes();
     }
 
     private void WaitInputHold()
@@ -47,7 +47,7 @@ public class SubquestPlate : MonoBehaviour
                 currentHoldTime += Time.deltaTime;
                 if (currentHoldTime >= timeToHold)
                 {
-                    isWaiting = true; //
+                    isWaiting = true; 
                     isHolding = false;
                 }
             }
@@ -80,7 +80,7 @@ public class SubquestPlate : MonoBehaviour
             timeText.gameObject.SetActive(true);
 
             timerToggle.gameObject.SetActive(true);
-            timerToggle.color = Color.white;
+            timerToggle.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.White);
         }
         else
         {
@@ -146,8 +146,10 @@ public class SubquestPlate : MonoBehaviour
 
         inputField_time.gameObject.SetActive(isTimer);
 
-        if (isTimer) timerToggle.color = Color.white;
-        else timerToggle.color = Color.gray;
+        if (isTimer) timerToggle.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.White);
+        else timerToggle.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Mid);
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     public bool HasCompleted()
@@ -196,5 +198,18 @@ public class SubquestPlate : MonoBehaviour
 
         isHolding = true;
         currentHoldTime = 0f;
+    }
+
+    void RestrictMinutes()
+    {
+        int minute = 0;
+        if (int.TryParse(inputField_time.text, out minute))
+        {
+            if (minute > 60) 
+            {
+                minute = 60;
+                inputField_time.text = minute.ToString();
+            }
+        }
     }
 }

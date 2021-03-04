@@ -61,6 +61,8 @@ public class QuestResultManager : MonoBehaviour
         resultWindow.UpdateRewards(rewards[0], rewards[1]);
 
         resultWindow.ActivateRewardButton();
+
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 
     void CalculateClearTime()
@@ -124,5 +126,6 @@ public class QuestResultManager : MonoBehaviour
     public void OpenLogWindow() // 버튼에서 실행됨
     {
         resultWindow.OpenLogWindow(currentQuest);
+        FindObjectOfType<ColorManager>().ChangeColors();
     }
 }

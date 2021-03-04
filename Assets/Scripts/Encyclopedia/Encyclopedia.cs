@@ -20,7 +20,6 @@ public class Encyclopedia : MonoBehaviour
     [Header("Palette")]
     [SerializeField] GameObject paletteView = null;
     [SerializeField] PaletteItem[] paletteItems = null;
-    int currentIndex = 0;
 
     UserData userData;
     ColorManager colorManager;
@@ -67,6 +66,8 @@ public class Encyclopedia : MonoBehaviour
 
     public void OpenWindow()
     {
+        if(FindObjectOfType<QuestManager>().isOnTheQuest) return;
+
         encyclopediaWindow.SetActive(true);
 
         background.GetComponent<ColorChanger>().ChangeColor();

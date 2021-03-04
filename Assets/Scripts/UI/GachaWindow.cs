@@ -19,7 +19,6 @@ public class GachaWindow : MonoBehaviour
 
     [Header("Result")]
     [SerializeField] GameObject result = null;
-    [SerializeField] Button getButton = null;
     [SerializeField] TextMeshProUGUI text= null;
     [SerializeField] TextMeshProUGUI subText = null;
     [SerializeField] GameObject character = null;

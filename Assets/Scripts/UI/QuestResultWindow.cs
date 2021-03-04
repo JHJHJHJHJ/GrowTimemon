@@ -240,11 +240,6 @@ public class QuestResultWindow : MonoBehaviour
         diaText.text = _dia.ToString();
     }
 
-    public void Skip()
-    {
-        // 나중에 넣기
-    }
-
     void SetUpAdditionalGoalByAchieveing(int _index, bool _isAchieved)
     {
         additionalGoals[_index].isAchieved = _isAchieved;
@@ -253,12 +248,12 @@ public class QuestResultWindow : MonoBehaviour
 
         if (_isAchieved)
         {
-            additionalGoals[_index].titleText.color = Color.black;
+            additionalGoals[_index].titleText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
             additionalGoals[_index].titleText.fontStyle = FontStyles.Normal;
         }
         else
         {
-            additionalGoals[_index].titleText.color = Color.gray;
+            additionalGoals[_index].titleText.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
             additionalGoals[_index].titleText.fontStyle = FontStyles.Strikethrough;
         }
 
@@ -269,8 +264,10 @@ public class QuestResultWindow : MonoBehaviour
     {
         float hours = Mathf.FloorToInt(_seconds / 3600);
         float timeWithoutHours = Mathf.FloorToInt(_seconds % 3600);
-        float minutes = Mathf.FloorToInt(_seconds / 60);
-        float seconds = Mathf.FloorToInt(_seconds % 60);
+        float minutes = Mathf.FloorToInt(timeWithoutHours / 60);
+        float seconds = Mathf.FloorToInt(timeWithoutHours % 60);
+
+        print(hours + " " + minutes + " " + seconds);
 
         string convertedTimeText = "";
         if (hours > 0) convertedTimeText += hours.ToString() + "시간 ";

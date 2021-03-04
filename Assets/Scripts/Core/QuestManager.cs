@@ -22,7 +22,6 @@ public class QuestManager : MonoBehaviour
     [SerializeField] QuestWindow questWindow = null;
 
     [Header("Developing")]
-    [SerializeField] string title = "default";
     [SerializeField] Sprite iconSprite = null;
     [SerializeField] List<SubQuest> subQuestList = new List<SubQuest>();
 

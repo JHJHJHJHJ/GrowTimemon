@@ -14,7 +14,6 @@ public class SwipeMenu : MonoBehaviour
     float distance = 0f;
 
     int currentIndex = 1;
-    int maxIndex = 0;
 
     bool canWork = true;
 

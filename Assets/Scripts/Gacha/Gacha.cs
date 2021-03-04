@@ -34,6 +34,8 @@ public class Gacha : MonoBehaviour
 
     public void OpenGachaWindow()
     {
+        if(FindObjectOfType<QuestManager>().isOnTheQuest) return;
+
         gachaWindow.gameObject.SetActive(true);
         gachaWindow.Initiailize();
     }

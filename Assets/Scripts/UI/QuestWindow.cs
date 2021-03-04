@@ -17,7 +17,6 @@ public class QuestWindow : MonoBehaviour
     [SerializeField] TextMeshProUGUI titleText = null;
     [SerializeField] ProceduralImage StartTime = null;
     [SerializeField] TextMeshProUGUI timeText = null;
-    [SerializeField] GameObject gold = null;
     [SerializeField] TextMeshProUGUI goldAmountText = null;
     [SerializeField] GameObject dia = null;
     [SerializeField] Image diaImage = null;

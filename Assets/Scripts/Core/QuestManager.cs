@@ -71,7 +71,7 @@ public class QuestManager : MonoBehaviour
 
             int[] rewards = new int[2] {(int)quest.rewardGoldAmount, (int)quest.rewardDiaAmount};
             newQuest.SetID(quest.id);
-            newQuest.SetupQuest(quest.title, iconSprite, quest.subQuestList, rewards, quest.alarm);
+            newQuest.SetupQuest(quest.title, iconSprite, quest.subQuestList, rewards, quest.alarm, quest.isRoutine);
         }
     }
 
@@ -330,13 +330,28 @@ public class QuestManager : MonoBehaviour
 
     public void DeleteCurrentQuest() // Yes 버튼에서 실행됨
     {
+        DestroyCurrentQuest();
+
+        questWindow.CloseQuestDeletePopUp();
+        questWindow.CloseWindow();
+    }
+
+    private void DestroyCurrentQuest()
+    {
         ES3.DeleteKey("HasCleard_" + currentQuest.id);
         questList.Remove(currentQuest);
         Destroy(currentQuest.gameObject);
 
-        questWindow.CloseQuestDeletePopUp();
-        questWindow.CloseWindow();
-
         notificationManager.RefreshNotifications(questList);
+    }
+
+    public void HandleQuestClear()
+    {
+        if(!currentQuest.isRoutine)
+        {
+            DestroyCurrentQuest();
+        } 
+
+        questResultManager.GetRewards();
     }
 }

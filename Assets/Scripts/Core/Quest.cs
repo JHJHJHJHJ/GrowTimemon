@@ -18,6 +18,7 @@ public class Quest : MonoBehaviour
     public Alarm alarm;
 
     bool hasCleared = false;
+    public bool isRoutine = false;
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI titleText = null;
@@ -26,6 +27,8 @@ public class Quest : MonoBehaviour
     [SerializeField] ColorChanger timeLimitBackground = null;
     [SerializeField] TextMeshProUGUI timeText = null;
     [SerializeField] GameObject hasClearedMarker = null;
+    [SerializeField] ColorChanger fill = null;
+    [SerializeField] ColorChanger shadow = null;
 
     [HideInInspector] public bool hasClicked = false;
 
@@ -42,22 +45,27 @@ public class Quest : MonoBehaviour
         id = _id;
     }
 
-    public void SetupQuest(string _title, Sprite _iconSprite, List<SubQuest> _subQuestList, int[] _rewardAmounts, Alarm _alarm)
+    public void SetupQuest(string _title, Sprite _iconSprite, List<SubQuest> _subQuestList, int[] _rewardAmounts, Alarm _alarm, bool _isRoutine)
     {
         title = _title;
         iconSprite = _iconSprite;
+
         subQuestList = _subQuestList;
+        
+        rewardGoldAmount = _rewardAmounts[0];
+        rewardDiaAmount = _rewardAmounts[1];
+
         if(_alarm != null)
         {
             alarm = _alarm;
         }
-
-        rewardGoldAmount = _rewardAmounts[0];
-        rewardDiaAmount = _rewardAmounts[1];
+        
+        isRoutine = _isRoutine;
 
         SetHasCleard(LoadHasCleared());
 
         UpdateQuestObject();
+        UpdateRoutineUI();
     }
 
     public void UpdateQuestObject()
@@ -74,6 +82,8 @@ public class Quest : MonoBehaviour
         {
             timeLimit.gameObject.SetActive(false);
         }
+
+        UpdateTimeLimit();
     }
 
     public void StartQuest()
@@ -170,6 +180,18 @@ public class Quest : MonoBehaviour
         else
         {
             return hasCleared;
+        }
+    }
+
+    void UpdateRoutineUI()
+    {
+        if(isRoutine)
+        {
+            shadow.ChangeColorValueTo(ColorValue.MidDark);
+        }
+        else
+        {
+            shadow.ChangeColorValueTo(ColorValue.Mid);
         }
     }
 }

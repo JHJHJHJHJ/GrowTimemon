@@ -42,9 +42,12 @@ public class QuestWindow : MonoBehaviour
     [SerializeField] GameObject subquestDeletePopUp = null;
     [SerializeField] GameObject questDeleteButton = null;
     [SerializeField] GameObject questDeletePopUp = null;
+    [SerializeField] GameObject routineButton = null;
     [SerializeField] AlarmSetWindow alarmSetWindow = null;
 
     Quest currentQuest;
+    public bool isRoutine = false;
+
 
     bool inSwitch = true;
     bool outSwitch = true;
@@ -61,6 +64,7 @@ public class QuestWindow : MonoBehaviour
         isEditing = false;
 
         currentQuest = _quest;
+        isRoutine = _quest.isRoutine;
 
         foreach (SubquestPlate subquestPlate in FindObjectsOfType<SubquestPlate>())
         {
@@ -73,6 +77,8 @@ public class QuestWindow : MonoBehaviour
 
         UpdateQuestInfo(_quest);
         UpdateAlarmUI(_quest.alarm);
+        UpdateIsRoutine();
+
         InstantiateCurrentSubquestPlates(_quest);
 
         FindObjectOfType<ColorManager>().ChangeColors();
@@ -82,6 +88,8 @@ public class QuestWindow : MonoBehaviour
     {
         isCreating = true;
         isEditing = true;
+
+        isRoutine = false;
 
         plateList = new List<SubquestPlate>();
 
@@ -96,6 +104,7 @@ public class QuestWindow : MonoBehaviour
         editButton.gameObject.SetActive(false);
         UpdateAlarmUI(new Alarm());
         noMoreReward.SetActive(false);
+        UpdateIsRoutine();
 
         goldAmountText.text = 0.ToString();
 
@@ -135,6 +144,7 @@ public class QuestWindow : MonoBehaviour
 
         StartTime.gameObject.SetActive(!isEditing);
         addAlarmButton.gameObject.SetActive(isEditing);
+        UpdateIsRoutine();
 
         if(!isCreating) UpdateHasCleardReward(currentQuest.GetHasCleard());
 
@@ -241,6 +251,43 @@ public class QuestWindow : MonoBehaviour
         }
 
         return canConfirm;
+    }
+
+    public void UpdateIsRoutine()
+    {
+        if(isEditing) 
+        {
+            routineButton.SetActive(true);
+            if(isCreating) SwitchIsRoutine(false);
+            else SwitchIsRoutine(currentQuest.isRoutine);
+           
+        }
+        else
+        {
+            if(currentQuest.isRoutine)
+            {
+                routineButton.SetActive(true);
+                SwitchIsRoutine(true);
+            }
+            else
+            {
+                routineButton.SetActive(false);
+            }
+        }
+    }
+
+    public void SwitchIsRoutine(bool _isRoutine)
+    {
+        if(_isRoutine) 
+        {
+            isRoutine = true;
+            routineButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidDark);
+        }
+        else 
+        {
+            isRoutine = false;
+            routineButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.MidLight);
+        }
     }
 
     public string GetInputedTitle()

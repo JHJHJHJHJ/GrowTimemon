@@ -110,7 +110,7 @@ public class QuestResultManager : MonoBehaviour
         }
     }
 
-    public void GetRewards() // 버튼에서 실행됨
+    public void GetRewards()
     {
         currentQuest.SetHasCleard(true);
 

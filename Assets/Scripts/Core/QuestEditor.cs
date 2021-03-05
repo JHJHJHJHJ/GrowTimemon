@@ -57,6 +57,13 @@ public class QuestEditor : MonoBehaviour
         }
     }
 
+    public void ToggleIsRoutine() // 버튼에서 실행됨
+    {
+        if(!questWindow.isEditing) return;
+
+        questWindow.SwitchIsRoutine(!questWindow.isRoutine);
+    }
+
     public void PasteEditedQuest(Quest _questToEdit, Sprite _iconSprite)
     {
         List<SubQuest> newSubquestList = new List<SubQuest>();
@@ -65,7 +72,7 @@ public class QuestEditor : MonoBehaviour
             newSubquestList.Add(plate.GetSubquestInfo());
         }
 
-        _questToEdit.SetupQuest(questWindow.GetInputedTitle(), _iconSprite, newSubquestList, currentRewards, alarmToEdit);
+        _questToEdit.SetupQuest(questWindow.GetInputedTitle(), _iconSprite, newSubquestList, currentRewards, alarmToEdit, questWindow.isRoutine);
     }
 
     void UpdateRewards()

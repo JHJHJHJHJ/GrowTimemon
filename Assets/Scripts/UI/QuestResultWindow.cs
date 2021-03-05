@@ -267,8 +267,6 @@ public class QuestResultWindow : MonoBehaviour
         float minutes = Mathf.FloorToInt(timeWithoutHours / 60);
         float seconds = Mathf.FloorToInt(timeWithoutHours % 60);
 
-        print(hours + " " + minutes + " " + seconds);
-
         string convertedTimeText = "";
         if (hours > 0) convertedTimeText += hours.ToString() + "시간 ";
         if (minutes > 0) convertedTimeText += minutes.ToString() + "분 ";

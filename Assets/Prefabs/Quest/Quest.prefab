@@ -286,12 +286,15 @@ MonoBehaviour:
     hour: 0
     minute: 0
     noon: 0
+  isRoutine: 0
   titleText: {fileID: 3888899066701689854}
   icon: {fileID: 3888899065693822203}
   timeLimit: {fileID: 3888899066103690388}
   timeLimitBackground: {fileID: 5953036623914064828}
   timeText: {fileID: 3888899066411045384}
   hasClearedMarker: {fileID: 4030212858618091306}
+  fill: {fileID: 0}
+  shadow: {fileID: 7592570390319097620}
   hasClicked: 0
 --- !u!114 &-2710760150389126991
 MonoBehaviour:
@@ -391,7 +394,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 0884f438f6122a140abe435dd7e35b4f, type: 3}
     - {fileID: 11500000, guid: 2ffade7edb5b1df45a6c3642149606c6, type: 3}
     - {fileID: 21300000, guid: 1a5c1d23632d8414d83371fc65eccffd, type: 3}
-    _Values: 3d66245b8681d52c3dcfa97cfe9b6558f0a66ece976f4e29a0c0b9210a61e8766bfc002a7cf55e7f68f9c4718caaf2242e209520edf86b52a1d6db0d8bcba03af466ca5c9e97360448ef369133c0b54a
+    _Values: 723a953f699bca5dd4b917d43c65222e7e4487afcc92c8409a3de2cc340bac4936df1488f056801d0cd2011ca1e1120a963fc025141a9112bddd82f2524269500be978ef681a6528c36abb9f94e5e247
 --- !u!1 &3888899066054950711
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +986,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5287671862590781028
 RectTransform:
   m_ObjectHideFlags: 0

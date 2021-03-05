@@ -36,7 +36,7 @@ public class QuestResultManager : MonoBehaviour
         currentQuest.subQuestList[_currentSubquestIndex].SetCompleteTimeDifference(completeTimeDifference);
     }
 
-    public void OpenResultWindow(Quest _currentQuest, DateTime[] _dateTime)  // 버튼에서 실행됨
+    public void OpenResultWindow(Quest _currentQuest, DateTime[] _dateTime)
     {
         currentQuest = _currentQuest;
         questTime = _dateTime;
@@ -55,7 +55,7 @@ public class QuestResultManager : MonoBehaviour
 
         resultWindow.UpdateClearTime(currentQuest, totalDeltaTime, totalTime, questTime);
 
-        resultWindow.SetUpAdditionalGoals(currentQuest, totalDeltaTime, totalTime, accuracyStandard);
+        resultWindow.SetUpAdditionalGoals(currentQuest, questTime[0], totalDeltaTime, totalTime, accuracyStandard);
     
         CalculateRewards();
         resultWindow.UpdateRewards(rewards[0], rewards[1]);

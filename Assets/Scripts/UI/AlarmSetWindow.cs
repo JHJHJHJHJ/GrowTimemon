@@ -79,6 +79,9 @@ public class AlarmSetWindow : MonoBehaviour
             alarmButton.GetComponent<ColorChanger>().ChangeColorValueTo(ColorValue.Dark);
             titleText.text = "알림 시간을 설정하세요.";
             bottom.gameObject.SetActive(true);
+
+            if(alarmToSet.noon == Noon.AM) SwitchToAM();
+            else SwitchToPM();
         }
         else
         {

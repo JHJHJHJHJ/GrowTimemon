@@ -112,7 +112,7 @@ public class QuestResultWindow : MonoBehaviour
         else clearTimeSlider.value = 1f;
     }
 
-    public void SetUpAdditionalGoals(Quest _Quest, float _totalDeltaTime, float _totalTime, float _accuratyStandard)
+    public void SetUpAdditionalGoals(Quest _Quest, DateTime _startTime, float _totalDeltaTime, float _totalTime, float _accuratyStandard)
     {
         additionalGoalsBackground.SetActive(true);
 
@@ -121,7 +121,7 @@ public class QuestResultWindow : MonoBehaviour
 
         if (_Quest.alarm.hasAlarm)
         {
-            if (IsRightTime(_Quest.alarm))
+            if (HasStartedRightTime(_Quest.alarm, _startTime))
             {
                 SetUpAdditionalGoalByAchieveing(0, true);
                 additionalGoals[0].explainationText.text = "제 시간에 시작했어요!";
@@ -208,7 +208,7 @@ public class QuestResultWindow : MonoBehaviour
         }
     }
 
-    public bool IsRightTime(Alarm _alarm)
+    bool HasStartedRightTime(Alarm _alarm, DateTime _startTime)
     {
         int hour = _alarm.hour;
         if(hour == 12)
@@ -227,7 +227,7 @@ public class QuestResultWindow : MonoBehaviour
         DateTime before10m = dateTime.AddMinutes(-10d);
         DateTime after10m = dateTime.AddMinutes(10d);
 
-        return (before10m <= DateTime.Now && DateTime.Now <= after10m);
+        return (before10m <= _startTime && _startTime <= after10m);
     }
     
     public void UpdateRewards(int _gold, int _dia)

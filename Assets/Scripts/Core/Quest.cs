@@ -62,8 +62,6 @@ public class Quest : MonoBehaviour
         
         isRoutine = _isRoutine;
 
-        SetHasCleard(LoadHasCleared());
-
         UpdateQuestObject();
         UpdateRoutineUI();
     }
@@ -171,7 +169,7 @@ public class Quest : MonoBehaviour
         ES3.Save<bool>("HasCleard_" + id.ToString(), hasCleared);
     }
 
-    bool LoadHasCleared()
+    public bool LoadHasCleared()
     {
         if(ES3.KeyExists("HasCleard_" + id.ToString()))
         {

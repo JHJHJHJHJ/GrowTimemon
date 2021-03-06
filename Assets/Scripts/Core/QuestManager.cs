@@ -72,6 +72,7 @@ public class QuestManager : MonoBehaviour
             int[] rewards = new int[2] {(int)quest.rewardGoldAmount, (int)quest.rewardDiaAmount};
             newQuest.SetID(quest.id);
             newQuest.SetupQuest(quest.title, iconSprite, quest.subQuestList, rewards, quest.alarm, quest.isRoutine);
+            newQuest.SetHasCleard(newQuest.LoadHasCleared());
         }
     }
 
@@ -290,6 +291,8 @@ public class QuestManager : MonoBehaviour
             Quest newQuest = InstantiateNewQuestObject();
             newQuest.SetID(GetNextID());
             questEditor.PasteEditedQuest(newQuest, iconSprite);
+            newQuest.SetHasCleard(false);
+
             UpdateCurrentQuest(newQuest);
             questWindow.isCreating = false;
         }

@@ -101,6 +101,8 @@ public class Gacha : MonoBehaviour
     void GetCharacter()
     {
         characterManager.CollectNewCharacter(charcterIndexToGet);
+
+        characterManager.SaveCharacterData();
     }
 
     void GetGold()

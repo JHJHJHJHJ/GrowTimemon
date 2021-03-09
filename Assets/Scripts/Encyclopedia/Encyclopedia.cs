@@ -43,6 +43,8 @@ public class Encyclopedia : MonoBehaviour
         itemToBuy.Have();
         userData.UseGold(itemToBuy.GetPrice());
         ChangePalette(_index);
+
+        SavePaletteItemsStatus();
     }
 
     public void ChangePalette(int _index)

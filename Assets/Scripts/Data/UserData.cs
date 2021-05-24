@@ -6,8 +6,8 @@ using EasyMobile;
 public class UserData : MonoBehaviour
 {
     [SerializeField] bool deleteSaveFile = false;
-    int gold;
-    int dia;  
+    [SerializeField] int gold;
+    [SerializeField] int dia;  
 
     private void Awake() 
     {

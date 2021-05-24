@@ -33,11 +33,6 @@ public class SystemSetUp : MonoBehaviour
         if (pauseStatus)
         {
             SaveData();
-
-            if (questManager.isOnTheQuest)
-            {
-                questManager.CancelQuest();
-            }
         }
     }
 
